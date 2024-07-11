@@ -2,12 +2,14 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = function override(config) {
   config.output = {
-    filename: "static/js/widget.js",
-    chunkFilename: "static/js/widget.[name].js",
-    path: "/Users/filipkulasinac/modal_script/build",
-    pathinfo: false,
-    publicPath: "/",
-    globalObject: "this",
+    ...config.output,
+    filename: "static/js/widget.[name].js",
+    // filename: "static/js/widget.js",
+    // chunkFilename: "static/js/widget.[name].js",
+    // path: "/modal_script/build",
+    // pathinfo: false,
+    // publicPath: "/",
+    // globalObject: "this",
   };
 
   config.plugins = config.plugins.map((plugin) => {
