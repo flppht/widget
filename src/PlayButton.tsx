@@ -23,7 +23,7 @@ const PlayButton = ({
       style={{
         opacity: isVideoPaused ? "1" : "0",
         position: "absolute",
-        top: isShown && !isMd && !isLg ? "25%" : "50%",
+        top: isShown && !isMd && !isLg ? "30%" : "50%",
         left: "50%",
         transform: `translate(-50%, -50%) ${hovered ? "scale(1.25)" : ""}`,
         padding: "2.25rem",

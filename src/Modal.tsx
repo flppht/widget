@@ -43,6 +43,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
     if (videoEl) {
       if (isOpen) {
         handlePlay();
+        videoEl.currentTime = 0;
         videoEl.muted = false;
       } else {
         handlePause();
@@ -144,10 +145,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
 
   const handleCloseModal = () => {
     handleExitFullscreen();
-    if (videoRef.current) {
-      // videoRef.current.muted = true;
-      videoRef.current.currentTime = 0;
-    }
     closeModal();
   };
 
@@ -181,6 +178,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
           left: isSm ? "20px" : "35px",
           width: isSm ? "85%" : "60%",
           pointerEvents: !isOpen ? "none" : "all",
+          zIndex: !isOpen ? "-10" : "auto",
           opacity: !isOpen ? "0" : "1",
           transform: !isOpen ? "scale(0.3)" : "scale(1)",
           backgroundColor: clientData?.data.circleBorderColor ?? "#ffffff",
