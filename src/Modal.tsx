@@ -80,7 +80,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
   useEffect(() => {
     const currentVideoRef = videoRef.current;
     if (currentVideoRef) {
-      videoRef.current.addEventListener("timeupdate", updateProgress);
+      currentVideoRef.addEventListener("timeupdate", updateProgress);
     }
     return () => {
       if (currentVideoRef) {
@@ -104,6 +104,17 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
 
   const toggleShared = () => {
     setShared(!shared);
+  };
+
+  const handleFillerClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (fillerRef.current && videoRef.current) {
+      const fillerRect = fillerRef.current.getBoundingClientRect();
+      const clickPosition = event.clientX - fillerRect.left;
+      const newTime =
+        (clickPosition / fillerRect.width) * videoRef.current.duration;
+      videoRef.current.currentTime = newTime;
+      setProgress((newTime / videoRef.current.duration) * 100);
+    }
   };
 
   return (
@@ -139,6 +150,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
       >
         <div
           ref={fillerRef}
+          onClick={handleFillerClick}
           style={{
             width: "100%",
             height: "0.5rem",
