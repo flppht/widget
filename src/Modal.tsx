@@ -374,6 +374,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                     display: "flex",
                     transition: "background-color 0.15s ease",
                     backgroundColor: "#ffffff",
+                    cursor: "pointer",
                   }}
                   onClick={toggleShared}
                   backgroundStyle={{
@@ -388,9 +389,8 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                     strokeWidth="1.5"
                     stroke="currentColor"
                     style={{
-                      width: "1.5rem",
-                      height: "1.5rem",
-                      cursor: "pointer",
+                      width: "24px",
+                      height: "24px",
                     }}
                   >
                     <path

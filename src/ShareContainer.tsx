@@ -18,7 +18,7 @@ const ShareContainer = ({ toggleShow }: { toggleShow: () => void }) => {
         <p style={{ fontWeight: "600", fontSize: "1.75rem" }}>Share</p>
         <button
           onClick={toggleShow}
-          style={{ borderWidth: 0, cursor: "pointer" }}
+          style={{ borderWidth: 0, cursor: "pointer", background: "none" }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

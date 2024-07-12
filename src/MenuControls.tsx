@@ -31,12 +31,12 @@ const MenuControls = ({
     transition: "all 0.2s ease",
     display: "flex",
     borderWidth: "0",
+    cursor: "pointer",
   };
 
   const svgStyle: React.CSSProperties = {
     width: isLg ? "1.5rem" : "1rem",
     height: isLg ? "1.5rem" : "1rem",
-    cursor: "pointer",
     color: "#ffffff",
   };
 
