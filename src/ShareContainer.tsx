@@ -29,6 +29,7 @@ const ShareContainer = ({ toggleShow }: { toggleShow: () => void }) => {
             style={{
               width: "1.5rem",
               height: "1.5rem",
+              color: "#000000",
             }}
           >
             <path

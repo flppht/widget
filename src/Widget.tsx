@@ -1,4 +1,3 @@
-// FloatingButtonModal.js
 import React, { useEffect, useState } from "react";
 import { widgetStyle, hoverStyle } from "./Styles";
 import VideoComponent from "./VideoComponent";

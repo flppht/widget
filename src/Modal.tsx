@@ -373,7 +373,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                     padding: "0.625rem",
                     display: "flex",
                     transition: "background-color 0.15s ease",
-                    backgroundColor: "#ffffff",
+                    // backgroundColor: "#ffffff",
                     cursor: "pointer",
                   }}
                   onClick={toggleShared}
@@ -391,6 +391,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                     style={{
                       width: "24px",
                       height: "24px",
+                      color: "#000000",
                     }}
                   >
                     <path
@@ -408,7 +409,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                     padding: "0.625rem",
                     display: "flex",
                     transition: "background-color 0.15s ease",
-                    backgroundColor: "#ffffff",
+                    // backgroundColor: "#ffffff",
                     cursor: "pointer",
                   }}
                   onClick={isSm ? showMenu : closeModal}
@@ -423,7 +424,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    style={{ width: "24px", height: "24px" }}
+                    style={{ width: "24px", height: "24px", color: "#000000" }}
                   >
                     <path
                       strokeLinecap="round"
