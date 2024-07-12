@@ -13,7 +13,7 @@ export interface ClientData {
     };
     videoUrl: string;
     posterUrl?: string;
-    borderColor: string;
+    circleBorderColor: string;
     circleText: string;
     circleHoverText: string;
     buttons: {
@@ -21,6 +21,7 @@ export interface ClientData {
     }[];
     buttonsStyle?: {};
     backgroundColor?: string;
+    borderColor: string;
   };
 }
 
@@ -49,8 +50,8 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
           ...widgetStyle,
           ...(hovered && hoverStyle),
           ...(isOpen && { opacity: "0" }),
-          ...(clientData?.data.borderColor && {
-            borderColor: clientData.data.borderColor,
+          ...(clientData?.data.circleBorderColor && {
+            borderColor: clientData.data.circleBorderColor,
           }),
         }}
         onClick={openModal}

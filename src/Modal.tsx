@@ -38,6 +38,19 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const videoEl = videoRef.current;
+    if (videoEl) {
+      if (isOpen) {
+        handlePlay();
+        videoEl.muted = false;
+      } else {
+        handlePause();
+        videoEl.muted = true;
+      }
+    }
+  }, [isOpen]);
+
   const isLg = windowSize.width >= 1024;
   const isMd = windowSize.width >= 768 && windowSize.width < 1024;
   const isSm = windowSize.width < 768;
@@ -63,9 +76,21 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
     }
   };
 
-  const fullScreen = () => {
-    if (modalRef.current) {
-      modalRef.current.requestFullscreen();
+  const handleFullScreen = () => {
+    const el = modalRef.current;
+    if (el) {
+      if (el.requestFullscreen) {
+        el.requestFullscreen();
+      } else if ((el as any).mozRequestFullScreen) {
+        // Firefox
+        (el as any).mozRequestFullScreen();
+      } else if ((el as any).webkitRequestFullscreen) {
+        // Chrome, Safari and Opera
+        (el as any).webkitRequestFullscreen();
+      } else if ((el as any).msRequestFullscreen) {
+        // IE/Edge
+        (el as any).msRequestFullscreen();
+      }
     }
   };
 
@@ -117,6 +142,34 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
     }
   };
 
+  const handleCloseModal = () => {
+    handleExitFullscreen();
+    if (videoRef.current) {
+      // videoRef.current.muted = true;
+      videoRef.current.currentTime = 0;
+    }
+    closeModal();
+  };
+
+  const handleExitFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch((err) => {
+        console.error(
+          `Error attempting to exit full-screen mode: ${err.message} (${err.name})`
+        );
+      });
+    } else if ((document as any).mozFullScreenElement) {
+      // Firefox
+      (document as any).mozCancelFullScreen();
+    } else if ((document as any).webkitFullscreenElement) {
+      // Chrome, Safari and Opera
+      (document as any).webkitExitFullscreen();
+    } else if ((document as any).msFullscreenElement) {
+      // IE/Edge
+      (document as any).msExitFullscreen();
+    }
+  };
+
   return (
     <div
       ref={modalRef}
@@ -130,7 +183,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
           pointerEvents: !isOpen ? "none" : "all",
           opacity: !isOpen ? "0" : "1",
           transform: !isOpen ? "scale(0.3)" : "scale(1)",
-          backgroundColor: clientData?.data.borderColor ?? "#ffffff",
+          backgroundColor: clientData?.data.circleBorderColor ?? "#ffffff",
         },
       }}
     >
@@ -176,7 +229,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
               height: "100%",
               pointerEvents: "none",
               width: `${progress}%`,
-              backgroundColor: `${clientData?.data.borderColor}`,
+              backgroundColor: `${clientData?.data.circleBorderColor}`,
             }}
           ></div>
         </div>
@@ -197,11 +250,11 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
           <MenuControls
             isLg={isLg}
             isMd={isMd}
-            fullScreen={fullScreen}
+            handleFullScreen={handleFullScreen}
             toggleMute={toggleMute}
             replayVideo={replayVideo}
             muted={videoRef?.current?.muted}
-            closeModal={closeModal}
+            closeModal={handleCloseModal}
             toggleShared={toggleShared}
           />
         </div>
@@ -239,7 +292,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                 poster={clientData?.data.posterUrl}
                 playsInline
                 autoPlay
-                muted
                 loop
                 ref={videoRef}
                 style={{
@@ -279,8 +331,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
           <div
             style={{
               transform: shared ? "translate(0%, 0%)" : "translate(0%, 100%)",
-              backgroundColor:
-                `${clientData?.data.backgroundColor}` || "#FFFFFF",
+              background: `${clientData?.data.backgroundColor}` || "#FFFFFF",
               position: "absolute",
               zIndex: 50,
               width: "100%",
@@ -288,14 +339,17 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
               borderTopRightRadius: "0.75rem",
               bottom: 0,
               left: 0,
-              paddingTop: "1.25rem",
-              paddingBottom: "4rem",
+              paddingTop: "0.25rem",
+              paddingBottom: isSm ? "2rem" : "3rem",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
               color: clientData?.data.title.color ?? "#000000",
               transition: "all 0.15s ease",
-              borderTop: isSm && isShown ? "1px solid #4e4c54" : "",
+              borderTop:
+                isSm && isShown
+                  ? `1px solid ${clientData?.data.borderColor}`
+                  : "",
             }}
           >
             <ShareContainer toggleShow={toggleShared} />
@@ -314,8 +368,10 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
             justifyContent: "center",
             alignItems: "center",
             position: isSm ? "absolute" : "static",
-            borderLeft: !isSm ? "1px solid #4e4c54" : "",
-            backgroundColor: clientData?.data.backgroundColor
+            borderLeft: !isSm
+              ? `1px solid ${clientData?.data.borderColor}`
+              : "",
+            background: clientData?.data.backgroundColor
               ? `${clientData?.data.backgroundColor}`
               : "#FFFFFF",
             borderTopLeftRadius: isSm ? "0.75rem" : "0",
@@ -330,9 +386,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
         >
           <div
             style={{
-              backgroundColor: clientData?.data.backgroundColor
-                ? `${clientData?.data.backgroundColor}`
-                : "#FFFFFF",
               height: "100%",
               width: "90%",
               pointerEvents: "auto",
@@ -342,7 +395,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
               flexDirection: "column",
               justifyContent: "space-between",
               alignItems: "flex-center",
-              transition: "all 1s ease",
             }}
           >
             <div
@@ -412,7 +464,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                     // backgroundColor: "#ffffff",
                     cursor: "pointer",
                   }}
-                  onClick={isSm ? showMenu : closeModal}
+                  onClick={isSm ? showMenu : handleCloseModal}
                   backgroundStyle={{
                     hovered: "#e5e5e5",
                     unhovered: "#ffffff",
@@ -492,7 +544,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
               display: !isSm ? "flex" : "none",
               cursor: "pointer",
               flexDirection: "row",
-              backgroundColor: clientData?.data.backgroundColor ?? "#FFFFFF",
+              background: clientData?.data.backgroundColor ?? "#FFFFFF",
               alignItems: "center",
               color: clientData?.data.title.color ?? "#000000",
               height: "65px",
@@ -540,8 +592,8 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
       <div
         onClick={showMenu}
         style={{
-          backgroundColor: clientData?.data.backgroundColor ?? "#ffffff",
-          borderTop: "1px solid #4e4c54",
+          background: clientData?.data.backgroundColor ?? "#ffffff",
+          borderTop: `1px solid ${clientData?.data.borderColor}`,
           display: isSm ? "flex" : "none",
           cursor: "pointer",
           flexDirection: "row",

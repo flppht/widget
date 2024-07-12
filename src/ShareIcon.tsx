@@ -12,6 +12,7 @@ const ShareIcon = ({ label, children, additionalStyles }: ShareIconProps) => {
     borderRadius: "9999px",
     border: "1px solid #D1D5DB",
     padding: "0.75rem",
+    display: "flex",
     cursor: "pointer",
     backgroundColor: hovered ? "rgba(0, 0, 0, 0.2)" : "rgba(0, 0, 0, 0.1)",
   };

@@ -5,7 +5,7 @@ interface MenuControlsProps {
   isLg: boolean;
   isMd: boolean;
   muted?: boolean;
-  fullScreen: () => void;
+  handleFullScreen: () => void;
   replayVideo: () => void;
   toggleMute: () => void;
   closeModal: () => void;
@@ -16,7 +16,7 @@ const MenuControls = ({
   isLg,
   isMd,
   muted,
-  fullScreen,
+  handleFullScreen,
   replayVideo,
   toggleMute,
   closeModal,
@@ -83,7 +83,7 @@ const MenuControls = ({
         </ControlButton>
         <ControlButton
           style={buttonStyle}
-          onClick={fullScreen}
+          onClick={handleFullScreen}
           backgroundStyle={{
             hovered: "rgba(0, 0, 0, 0.4)",
             unhovered: "rgba(0, 0, 0, 0.2)",
