@@ -50,7 +50,8 @@ const MenuControls = ({
           justifyContent: "flex-start",
           gap: isLg ? "0.75rem" : "0.25rem",
           width: "50%",
-          marginLeft: isMd || isLg ? "16px" : "8px",
+          paddingTop: "0.75rem",
+          paddingLeft: isLg ? "1rem" : "0.5rem",
         }}
       >
         <ControlButton
@@ -145,7 +146,8 @@ const MenuControls = ({
           justifyContent: "flex-end",
           display: isMd || isLg ? "none" : "flex",
           gap: "0.25rem",
-          marginRight: isMd || isLg ? "16px" : "8px",
+          paddingTop: "0.75rem",
+          paddingRight: isLg ? "1rem" : "0.5rem",
         }}
       >
         {/* share button */}

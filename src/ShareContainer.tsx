@@ -1,5 +1,6 @@
 import React from "react";
 import ShareIcon from "./ShareIcon";
+import { paragraphStyle } from "./Styles";
 
 const ShareContainer = ({ toggleShow }: { toggleShow: () => void }) => {
   return (
@@ -15,7 +16,14 @@ const ShareContainer = ({ toggleShow }: { toggleShow: () => void }) => {
           paddingRight: "5%",
         }}
       >
-        <p style={{ fontWeight: "600", fontSize: "1.75rem" }}>Share</p>
+        <p
+          style={{
+            ...{ fontWeight: "600", fontSize: "1.75rem" },
+            ...paragraphStyle,
+          }}
+        >
+          Share
+        </p>
         <button
           onClick={toggleShow}
           style={{ borderWidth: 0, cursor: "pointer", background: "none" }}

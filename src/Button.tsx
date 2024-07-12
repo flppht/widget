@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { paragraphStyle } from "./Styles";
 
 const Button = ({ text }: { text: string }) => {
   const [hovered, setHovered] = useState(false);
@@ -21,17 +22,21 @@ const Button = ({ text }: { text: string }) => {
         justifyContent: "start",
         backgroundColor: hovered ? "rgb(212 212 212)" : "#FFFFFF",
         color: "#000000",
+        cursor: "pointer",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       <p
         style={{
-          fontFamily: "Inter, sans-serif",
-          textAlign: "center",
-          width: "100%",
-          fontSize: "0.875rem",
-          fontWeight: 600,
+          ...{
+            fontFamily: "Inter, sans-serif",
+            textAlign: "center",
+            width: "100%",
+            fontSize: "0.875rem",
+            fontWeight: 600,
+          },
+          ...paragraphStyle,
         }}
       >
         {text}

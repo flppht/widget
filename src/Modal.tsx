@@ -5,7 +5,7 @@ import MenuControls from "./MenuControls";
 import ShareContainer from "./ShareContainer";
 import PlayButton from "./PlayButton";
 import ControlButton from "./ControlButton";
-import { modalStyle } from "./Styles";
+import { modalStyle, paragraphStyle } from "./Styles";
 
 type ModalProps = {
   isOpen: boolean;
@@ -83,15 +83,28 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
       if (el.requestFullscreen) {
         el.requestFullscreen();
       } else if ((el as any).mozRequestFullScreen) {
-        // Firefox
         (el as any).mozRequestFullScreen();
       } else if ((el as any).webkitRequestFullscreen) {
-        // Chrome, Safari and Opera
         (el as any).webkitRequestFullscreen();
       } else if ((el as any).msRequestFullscreen) {
-        // IE/Edge
         (el as any).msRequestFullscreen();
       }
+    }
+  };
+
+  const handleExitFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch((err) => {
+        console.error(
+          `Error attempting to exit full-screen mode: ${err.message} (${err.name})`
+        );
+      });
+    } else if ((document as any).mozFullScreenElement) {
+      (document as any).mozCancelFullScreen();
+    } else if ((document as any).webkitFullscreenElement) {
+      (document as any).webkitExitFullscreen();
+    } else if ((document as any).msFullscreenElement) {
+      (document as any).msExitFullscreen();
     }
   };
 
@@ -146,25 +159,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
   const handleCloseModal = () => {
     handleExitFullscreen();
     closeModal();
-  };
-
-  const handleExitFullscreen = () => {
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch((err) => {
-        console.error(
-          `Error attempting to exit full-screen mode: ${err.message} (${err.name})`
-        );
-      });
-    } else if ((document as any).mozFullScreenElement) {
-      // Firefox
-      (document as any).mozCancelFullScreen();
-    } else if ((document as any).webkitFullscreenElement) {
-      // Chrome, Safari and Opera
-      (document as any).webkitExitFullscreen();
-    } else if ((document as any).msFullscreenElement) {
-      // IE/Edge
-      (document as any).msExitFullscreen();
-    }
   };
 
   return (
@@ -234,9 +228,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
         {/* menu for video controls */}
         <div
           style={{
-            paddingTop: "0.75rem",
-            paddingLeft: isLg ? "1rem" : "0.5rem",
-            paddingRight: isLg ? "1rem" : "0.5rem",
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
@@ -385,7 +376,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
           <div
             style={{
               height: "100%",
-              width: "90%",
+              width: "100%",
               pointerEvents: "auto",
               borderTopLeftRadius: isSm ? "0.75rem" : "0",
               borderTopRightRadius: isSm ? "0.75rem" : "0",
@@ -401,8 +392,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                 flexDirection: "row",
                 width: "100%",
                 alignItems: "center",
-                paddingTop: "1.25rem",
-                paddingRight: "1.25rem",
                 color: "#6B7280",
                 justifyContent: "flex-end",
               }}
@@ -413,6 +402,8 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                   flexDirection: "row",
                   alignItems: "center",
                   gap: "0.75rem",
+                  marginTop: "1.25rem",
+                  marginRight: "1.25rem",
                 }}
               >
                 <ControlButton
@@ -499,22 +490,24 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                 paddingRight: "10%",
               }}
             >
-              <p
+              <div
                 style={{
                   color: clientData?.data.title.color ?? "",
                   fontSize: "32px",
-                  marginBottom: "10px",
                   textAlign: "center",
                   fontWeight: 600,
                 }}
               >
                 {clientData?.data.title.text}
-              </p>
+              </div>
               <p
                 style={{
-                  fontSize: "0.875rem",
-                  color: "#6B7280",
-                  marginTop: 0,
+                  ...{
+                    fontSize: "1rem",
+                    color: "#6B7280",
+                    marginTop: "5px",
+                  },
+                  ...paragraphStyle,
                 }}
               >
                 Where to next?
@@ -567,11 +560,12 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
               }}
             >
               <p
-                style={{
+                style={{...{
                   fontSize: "0.75rem",
                   color: "#9CA3AF",
                   marginRight: "0.25rem",
                   whiteSpace: "nowrap",
+                }, ...paragraphStyle,
                 }}
               >
                 Powered by
@@ -622,11 +616,14 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
         </svg>
         <p
           style={{
-            fontSize: "0.875rem",
-            fontWeight: 500,
-            color: "#9CA3AF",
-            marginLeft: "0.25rem",
-            whiteSpace: "nowrap",
+            ...{
+              fontSize: "0.875rem",
+              fontWeight: 500,
+              color: "#9CA3AF",
+              marginLeft: "0.25rem",
+              whiteSpace: "nowrap",
+            },
+            ...paragraphStyle,
           }}
         >
           Show Main Menu

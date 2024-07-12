@@ -45,3 +45,7 @@ export const modalStyle: React.CSSProperties = {
   flexDirection: "column",
   justifyContent: "space-between",
 };
+
+export const paragraphStyle = {
+  margin: "14px",
+};
