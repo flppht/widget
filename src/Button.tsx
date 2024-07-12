@@ -20,6 +20,7 @@ const Button = ({ text }: { text: string }) => {
         alignItems: "center",
         justifyContent: "start",
         backgroundColor: hovered ? "rgb(212 212 212)" : "#FFFFFF",
+        color: "#000000",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
