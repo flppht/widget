@@ -3,7 +3,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 module.exports = function override(config) {
   config.output = {
     ...config.output,
-    filename: "static/js/widget.[name].js",
+    filename: "static/js/widget.js",
+    chunkFilename: "static/js/widget.[name].js",
     // filename: "static/js/widget.js",
     // chunkFilename: "static/js/widget.[name].js",
     // path: "/modal_script/build",
