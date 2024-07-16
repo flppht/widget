@@ -19,7 +19,7 @@ const ChatWidget = ({ backgroundColor, isOpen }: ChatWidgetProps) => {
           ...(isOpen ? { zIndex: "-10" } : { zIndex: "30" }),
           ...(backgroundColor && {
             backgroundColor: backgroundColor,
-            backgroundImage: `linear-gradient(135deg, ${backgroundColor} 60%, rgba(0, 0, 0, 0.7) 100%)`,
+            backgroundImage: `linear-gradient(135deg, ${backgroundColor} 60%, rgba(0, 0, 0, 0.3) 100%)`,
           }),
         }}
         // onClick={openModal}
