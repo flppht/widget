@@ -14,6 +14,7 @@ const VideoComponent = ({
         height: "100%",
         overflow: "hidden",
         borderRadius: "9999px",
+        position: "relative",
       }}
     >
       <video

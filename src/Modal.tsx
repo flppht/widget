@@ -6,6 +6,7 @@ import ShareContainer from "./ShareContainer";
 import PlayButton from "./PlayButton";
 import ControlButton from "./ControlButton";
 import { modalStyle, paragraphStyle } from "./Styles";
+import PlanButton from "./PlanButton";
 
 type ModalProps = {
   isOpen: boolean;
@@ -21,6 +22,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
   const fillerRef = useRef<HTMLDivElement>(null);
+  const [playPromise, setPlayPromise] = useState<Promise<void> | undefined>();
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -57,12 +59,18 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
   const isSm = windowSize.width < 768;
 
   const handlePause = () => {
-    videoRef.current?.pause();
+    if (playPromise !== undefined) {
+      playPromise
+        .then((_) => videoRef.current?.pause())
+        .catch((error) => console.log("autoplay preveted"));
+    }
+
     setIsVideoPaused(true);
   };
 
   const handlePlay = () => {
-    videoRef.current?.play();
+    let playPromise = videoRef.current?.play();
+    setPlayPromise(playPromise);
     setIsVideoPaused(false);
   };
 
@@ -109,10 +117,14 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
   };
 
   const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !videoRef.current.muted;
-      videoRef.current.play();
-      setIsVideoPaused(false);
+    const currentVideoRef = videoRef.current;
+    if (currentVideoRef) {
+      currentVideoRef.muted = !currentVideoRef.muted;
+      if (currentVideoRef.paused) {
+        console.log("uslo");
+        currentVideoRef.play();
+        setIsVideoPaused(false);
+      }
     }
   };
 
@@ -245,6 +257,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
             muted={videoRef?.current?.muted}
             closeModal={handleCloseModal}
             toggleShared={toggleShared}
+            isChat={false}
           />
         </div>
       </div>
@@ -315,6 +328,96 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
             isMd={isMd}
             isLg={isLg}
           />
+          {/* plans */}
+          {/* gradient behind the plans  */}
+          <div
+            style={{
+              opacity: "0.5",
+              transition: "all 0.2s ease 0s",
+              position: "absolute",
+              left: 0,
+              top: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 10,
+              pointerEvents: "none",
+              backgroundImage:
+                "linear-gradient(to top, rgba(0,0,0,100), rgba(0, 0, 0, 0))",
+            }}
+          ></div>
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 10,
+              width: "100%",
+              pointerEvents: "none",
+              bottom: 0,
+
+              display: "flex",
+              flexDirection: "column",
+              color: "white",
+              transition: "transform 0.3s",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                paddingLeft: isLg ? "1.5rem" : "1rem",
+                paddingRight: isLg ? "1.5rem" : "1rem",
+                fontSize: "20px",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                style={{
+                  width: "20px",
+                  height: "20px",
+                  marginRight: "8px",
+                }}
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                  clipRule="evenodd"
+                ></path>
+              </svg>
+              Chicago, IL
+            </div>
+            <p
+              style={{
+                fontSize: "1rem",
+                color: "white",
+                marginTop: "10px",
+                marginBottom: "10px",
+                paddingLeft: isLg ? "1.5rem" : "1rem",
+              }}
+            >
+              Where to next?
+            </p>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                gap: "0.5rem",
+                paddingLeft: isLg ? "1.5rem" : "1rem",
+                paddingRight: isLg ? "1.5rem" : "1rem",
+                paddingTop: "0.5rem",
+                paddingBottom: "1.5rem",
+              }}
+            >
+              <PlanButton
+                order={"A"}
+                text={"Tour our Floor Plan"}
+                isLg={isLg}
+              />
+              <PlanButton order={"B"} text={"Explore Amenities"} isLg={isLg} />
+              <PlanButton order={"C"} text={"中文导览"} isLg={isLg} />
+            </div>
+          </div>
 
           {/* share option */}
           <div
@@ -394,6 +497,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                 alignItems: "center",
                 color: "#6B7280",
                 justifyContent: "flex-end",
+                paddingBottom: "1rem",
               }}
             >
               <div
@@ -432,7 +536,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                     style={{
                       width: "24px",
                       height: "24px",
-                      color: "#000000",
                     }}
                   >
                     <path
@@ -465,7 +568,10 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    style={{ width: "24px", height: "24px", color: "#000000" }}
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                    }}
                   >
                     <path
                       strokeLinecap="round"
@@ -530,17 +636,16 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
             </div>
           </div>{" "}
           {/* footer if needed */}
-          {/* <div
+          <div
             style={{
               display: !isSm ? "flex" : "none",
-              cursor: "pointer",
+              // cursor: "pointer",
               flexDirection: "row",
-              background: clientData?.data.backgroundColor ?? "#FFFFFF",
               alignItems: "center",
-              color: clientData?.data.title.color ?? "#000000",
+              color: "#ffffff",
               height: "65px",
-              borderTopWidth: "1px",
-              borderTopColor: "#E5E7EB",
+              borderTop: "1px solid",
+              borderTopColor: clientData?.data.borderColor ?? "#000000",
               width: "100%",
               position: "relative",
               zIndex: 20,
@@ -560,23 +665,27 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
               }}
             >
               <p
-                style={{...{
-                  fontSize: "0.75rem",
-                  color: "#9CA3AF",
-                  marginRight: "0.25rem",
+                style={{
+                  fontSize: "14px",
+                  color: clientData?.data.title.color ?? "#000000",
+                  marginTop: "14px",
+                  marginBottom: "14px",
                   whiteSpace: "nowrap",
-                }, ...paragraphStyle,
                 }}
               >
                 Powered by
               </p>
               <img
-                style={{ height: "1.25rem", marginTop: "2px" }}
+                style={{
+                  height: "1.25rem",
+                  marginTop: "2px",
+                  paddingLeft: "5px",
+                }}
                 src="https://imagedelivery.net/d3WSibrZmE8m_HEZW60OcQ/f1241207-f4a8-4e8a-030e-110332ad6200/public"
                 alt=""
               />
             </div>
-              </div> */}
+          </div>
         </div>
       </div>
 
@@ -585,7 +694,8 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
         onClick={showMenu}
         style={{
           background: clientData?.data.backgroundColor ?? "#ffffff",
-          borderTop: `1px solid ${clientData?.data.borderColor}`,
+          borderTop: "1px solid",
+          borderTopColor: clientData?.data.borderColor ?? "#000000",
           display: isSm ? "flex" : "none",
           cursor: "pointer",
           flexDirection: "row",
@@ -599,12 +709,12 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          fill="none"
+          fill="currentColor"
           viewBox="0 0 20 20"
           style={{
             width: "1.5rem",
             height: "1.5rem",
-            fill: "#9CA3AF",
+            color: "#9CA3AF",
             marginRight: "0.75rem",
           }}
         >

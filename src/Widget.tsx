@@ -3,6 +3,7 @@ import { widgetStyle, hoverStyle } from "./Styles";
 import VideoComponent from "./VideoComponent";
 import Modal from "./Modal";
 import { data } from "./TemporaryData";
+import ChatWidget from "./ChatWidget";
 
 export interface ClientData {
   id: string | number;
@@ -63,6 +64,25 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
           posterUrl={clientData?.data.posterUrl}
         />
 
+        {/* gradient */}
+        <div
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            overflow: "hidden",
+            borderRadius: "9999px",
+            backgroundImage: hovered
+              ? `linear-gradient(to top, rgba(0, 0, 0, 0) 20%, ${clientData?.data.circleBorderColor} 80%)`
+              : "",
+            opacity: 0.8,
+            zIndex: 30,
+            top: 0,
+            left: 0,
+          }}
+        ></div>
+
+        {/* text */}
         <div
           style={{
             position: "absolute",
@@ -73,14 +93,44 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
             fontSize: "14px",
           }}
         >
-          <p style={{ textAlign: "center" }}>
-            {!hovered
-              ? clientData?.data.circleText
-              : clientData?.data.circleHoverText}
+          <p
+            style={{
+              textAlign: "center",
+              opacity: hovered ? "1" : "0",
+              transform: hovered ? "translateY(0%)" : "translateY(-120%)",
+              transition: "all 0.3s ease",
+            }}
+          >
+            {clientData?.data.circleHoverText}
+          </p>
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            display: "flex",
+            alignItems: "center",
+            color: "#FFFFFF",
+            zIndex: 30,
+            fontSize: "14px",
+          }}
+        >
+          <p
+            style={{
+              textAlign: "center",
+              opacity: hovered ? "0" : "1",
+              transform: hovered ? "translateY(120%)" : "translateY(0%)",
+              transition: "all 0.3s ease",
+            }}
+          >
+            {clientData?.data.circleText}
           </p>
         </div>
       </div>
       <Modal isOpen={isOpen} closeModal={closeModal} clientData={clientData} />
+      <ChatWidget
+        isOpen={isOpen}
+        backgroundColor={clientData?.data.circleBorderColor}
+      />
     </>
   );
 };

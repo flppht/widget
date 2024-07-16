@@ -1,19 +1,20 @@
 export const widgetStyle: React.CSSProperties = {
   color: "#000000",
   position: "absolute",
-  bottom: "40px",
-  left: "40px",
+  bottom: "20px",
+  left: "35px",
   transition: "all 0.2s ease-in-out 0.1s",
   width: "130px",
   height: "130px",
   borderRadius: "100%",
-  boxShadow:
-    "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+  // boxShadow:
+  //   "0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+  boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)",
   fontSize: "15px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  border: "5px solid",
+  border: "6px solid",
   cursor: "pointer",
   fontFamily:
     "ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
@@ -48,4 +49,30 @@ export const modalStyle: React.CSSProperties = {
 
 export const paragraphStyle = {
   margin: "14px",
+};
+
+export const chatStyle: React.CSSProperties = {
+  color: "#000000",
+  position: "absolute",
+  bottom: "20px",
+  left: "140px",
+  transition: "all 0.2s ease-in-out 0.1s",
+  width: "60px",
+  height: "60px",
+  borderRadius: "100%",
+  boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)",
+  fontSize: "15px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  cursor: "pointer",
+  fontFamily:
+    "ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+};
+
+export const messageBlock: React.CSSProperties = {
+  background: "#f2f2f2",
+  padding: "10px 15px",
+  borderRadius: "10px",
+  color: "black",
 };
