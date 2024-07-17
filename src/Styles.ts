@@ -4,9 +4,9 @@ export const widgetStyle: React.CSSProperties = {
   bottom: "20px",
   left: "35px",
   transition: "all 0.2s ease-in-out 0.1s",
-  width: "130px",
-  height: "130px",
-  borderRadius: "100%",
+  width: "125px",
+  height: "125px",
+  borderRadius: "9999px",
   // boxShadow:
   //   "0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
   boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)",
@@ -18,6 +18,7 @@ export const widgetStyle: React.CSSProperties = {
   cursor: "pointer",
   fontFamily:
     "ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+  overflow: "hidden",
 };
 
 export const hoverStyle: React.CSSProperties = {
@@ -25,10 +26,8 @@ export const hoverStyle: React.CSSProperties = {
 };
 
 export const modalStyle: React.CSSProperties = {
-  borderColor: "rgb(117, 117, 117)",
   boxShadow: "rgba(0, 0, 0, 0.5) 0px 3px 20px",
   borderRadius: "24px",
-  borderWidth: "0px",
   right: "unset",
   bottom: "20px",
   transition:

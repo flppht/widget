@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { widgetStyle, hoverStyle } from "./Styles";
-import VideoComponent from "./VideoComponent";
+import CircleComponent from "./CircleComponent";
 import Modal from "./Modal";
 import { data } from "./TemporaryData";
 import ChatWidget from "./ChatWidget";
@@ -54,33 +54,56 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
           ...(clientData?.data.circleBorderColor && {
             borderColor: clientData.data.circleBorderColor,
           }),
+          ...{ backgroundColor: clientData?.data.circleBorderColor },
         }}
         onClick={openModal}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
       >
-        <VideoComponent
+        {/* gradients */}
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            borderRadius: "50%",
+            position: "absolute",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              overflow: "hidden",
+              borderRadius: "9999px",
+              backgroundImage:
+                "linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 1))",
+              opacity: 0.8,
+              zIndex: 30,
+              top: 0,
+              left: 0,
+            }}
+          />
+          <div
+            style={{
+              // position: "absolute",
+              // top: 0,
+              // left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundImage: hovered
+                ? `linear-gradient(to bottom,  ${clientData?.data.circleBorderColor}, color-mix(in srgb, ${clientData?.data.circleBorderColor} 10%, transparent))`
+                : "",
+              opacity: 0.8,
+              zIndex: 30,
+              transition: "all 0.3s ease-in-out 0.1s",
+            }}
+          />
+        </div>
+        <CircleComponent
           videoUrl={clientData?.data.videoUrl}
           posterUrl={clientData?.data.posterUrl}
         />
-
-        {/* gradient */}
-        <div
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            overflow: "hidden",
-            borderRadius: "9999px",
-            backgroundImage: hovered
-              ? `linear-gradient(to top, rgba(0, 0, 0, 0) 20%, ${clientData?.data.circleBorderColor} 80%)`
-              : "",
-            opacity: 0.8,
-            zIndex: 30,
-            top: 0,
-            left: 0,
-          }}
-        ></div>
 
         {/* text */}
         <div
@@ -98,7 +121,7 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
               textAlign: "center",
               opacity: hovered ? "1" : "0",
               transform: hovered ? "translateY(0%)" : "translateY(-120%)",
-              transition: "all 0.3s ease",
+              transition: "all 0.3s ease-in-out",
             }}
           >
             {clientData?.data.circleHoverText}
@@ -119,7 +142,7 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
               textAlign: "center",
               opacity: hovered ? "0" : "1",
               transform: hovered ? "translateY(120%)" : "translateY(0%)",
-              transition: "all 0.3s ease",
+              transition: "all 0.3s ease-in-out",
             }}
           >
             {clientData?.data.circleText}
