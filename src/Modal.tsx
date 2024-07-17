@@ -121,7 +121,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
     if (currentVideoRef) {
       currentVideoRef.muted = !currentVideoRef.muted;
       if (currentVideoRef.paused) {
-        console.log("uslo");
         currentVideoRef.play();
         setIsVideoPaused(false);
       }
