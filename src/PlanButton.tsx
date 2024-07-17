@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { paragraphStyle } from "./Styles";
 
 const PlanButton = ({ order, text, isLg }) => {
   const [hovered, setHovered] = useState(false);
@@ -20,6 +21,7 @@ const PlanButton = ({ order, text, isLg }) => {
         alignItems: "center",
         justifyContent: "flex-start",
         cursor: "pointer",
+        padding: isLg ? "7px" : "5px",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -37,12 +39,17 @@ const PlanButton = ({ order, text, isLg }) => {
           justifyContent: "center",
           fontWeight: "bold",
           color: "#ffffff",
-          marginLeft: "0.5rem",
+          marginLeft: "1.25rem",
         }}
       >
         {order}
       </div>
-      <p style={{ font: "#fffff", padding: "8px", marginLeft: "10px" }}>
+      <p
+        style={{
+          ...{ font: "#fffff" },
+          ...paragraphStyle,
+        }}
+      >
         {text}
       </p>
     </button>
