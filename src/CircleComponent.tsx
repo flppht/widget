@@ -19,7 +19,8 @@ const CircleComponent = ({
         muted
         loop
         playsInline
-        // src={videoUrl}
+        controls={false}
+        src={videoUrl}
         style={{
           borderRadius: "9999px",
           width: "100%",
