@@ -1,20 +1,17 @@
 export const widgetStyle: React.CSSProperties = {
-  color: "#000000",
+  boxSizing: "border-box",
   position: "absolute",
   bottom: "20px",
   left: "35px",
   transition: "all 0.2s ease-in-out 0.1s",
-  width: "125px",
-  height: "125px",
+  width: "130px",
+  height: "130px",
   borderRadius: "9999px",
-  // boxShadow:
-  //   "0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-  boxShadow: "0 0 20px rgba(0, 0, 0, 0.5)",
+  boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
   fontSize: "15px",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  border: "6px solid",
   cursor: "pointer",
   fontFamily:
     "ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
@@ -46,7 +43,7 @@ export const modalStyle: React.CSSProperties = {
   justifyContent: "space-between",
 };
 
-export const paragraphStyle = {
+export const paragraphStyle: React.CSSProperties = {
   margin: "14px",
 };
 
@@ -75,3 +72,114 @@ export const messageBlock: React.CSSProperties = {
   borderRadius: "10px",
   color: "black",
 };
+
+export const keyframes1 = `
+0% {
+  clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
+}
+12.5% {
+  clip-path: polygon(
+    50% 50%,
+    0 0,
+    50% 0%,
+    100% 0%,
+    100% 0%,
+    100% 0%,
+    100% 0%
+  );
+}
+25% {
+  clip-path: polygon(
+    50% 50%,
+    0 0,
+    50% 0%,
+    100% 0%,
+    100% 100%,
+    100% 100%,
+    100% 100%
+  );
+}
+50% {
+  clip-path: polygon(
+    50% 50%,
+    0 0,
+    50% 0%,
+    100% 0%,
+    100% 100%,
+    50% 100%,
+    0% 100%
+  );
+}
+62.5% {
+  clip-path: polygon(
+    50% 50%,
+    100% 0,
+    100% 0%,
+    100% 0%,
+    100% 100%,
+    50% 100%,
+    0% 100%
+  );
+}
+75% {
+  clip-path: polygon(
+    50% 50%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    50% 100%,
+    0% 100%
+  );
+}
+100% {
+  clip-path: polygon(
+    50% 50%,
+    50% 100%,
+    50% 100%,
+    50% 100%,
+    50% 100%,
+    50% 100%,
+    0% 100%
+  );
+}
+`;
+
+export const keyframes2 = `
+0% {
+  transform: scaleY(1) rotate(0deg);
+}
+49.99% {
+  transform: scaleY(1) rotate(135deg);
+}
+50% {
+  transform: scaleY(-1) rotate(0deg);
+}
+100% {
+  transform: scaleY(-1) rotate(-135deg);
+}
+`;
+
+export const keyframes3 = `
+to {
+  border-color: transparent;
+}
+`;
+
+export const keyframes4 = `
+to {
+  border-color: rgb(100, 116, 139);
+}
+`;
+
+export const keyframes5 = `
+0% {
+  transform: scale(0.1);
+  opacity: 1;
+}
+80%,
+100% {
+  transform: scale(1.4);
+  opacity: 0;
+}
+`;

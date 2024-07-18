@@ -62,7 +62,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
     if (playPromise !== undefined) {
       playPromise
         .then((_) => videoRef.current?.pause())
-        .catch((error) => console.log("autoplay preveted"));
+        .catch((error) => console.log("autoplay prevented"));
     }
 
     setIsVideoPaused(true);

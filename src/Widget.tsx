@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { widgetStyle, hoverStyle } from "./Styles";
+import {
+  widgetStyle,
+  hoverStyle,
+  keyframes1,
+  keyframes2,
+  keyframes3,
+  keyframes4,
+  keyframes5,
+} from "./Styles";
 import CircleComponent from "./CircleComponent";
 import Modal from "./Modal";
 import { data } from "./TemporaryData";
@@ -44,17 +52,40 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
     setClientData(item);
   }, [clientId]);
 
+  useEffect(() => {
+    const sheet = createStyleSheet();
+    if (sheet) {
+      injectKeyframes(sheet, keyframes1, "lwid-1");
+      injectKeyframes(sheet, keyframes2, "lwid-2");
+      injectKeyframes(sheet, keyframes3, "border-disappear");
+      injectKeyframes(sheet, keyframes4, "border-turns-primary-from-white");
+      injectKeyframes(sheet, keyframes5, "ping");
+    }
+  }, []);
+
   return (
     <>
       <div
         style={{
           ...widgetStyle,
+          ...{
+            ...(isOpen && { opacity: "0" }),
+            backgroundColor: clientData?.data.circleBorderColor,
+            animation: "ping 1s cubic-bezier(0, 0, 0.2, 1) 4",
+          },
+        }}
+      ></div>
+      <div
+        style={{
+          ...widgetStyle,
           ...(hovered && hoverStyle),
           ...(isOpen && { opacity: "0" }),
-          ...(clientData?.data.circleBorderColor && {
-            borderColor: clientData.data.circleBorderColor,
-          }),
-          ...{ backgroundColor: clientData?.data.circleBorderColor },
+          ...{
+            backgroundColor: clientData?.data.circleBorderColor,
+            animation: "border-turns-primary-from-white 1s 3s forwards",
+            border: "6px solid #fff",
+            borderSpacing: "0px 0px",
+          },
         }}
         onClick={openModal}
         onMouseEnter={() => setHovered(true)}
@@ -86,23 +117,36 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
           />
           <div
             style={{
-              // position: "absolute",
-              // top: 0,
-              // left: 0,
               width: "100%",
               height: "100%",
               backgroundImage: hovered
                 ? `linear-gradient(to bottom,  ${clientData?.data.circleBorderColor}, color-mix(in srgb, ${clientData?.data.circleBorderColor} 10%, transparent))`
                 : "",
               opacity: 0.8,
-              zIndex: 30,
+              zIndex: "9999",
               transition: "all 0.3s ease-in-out 0.1s",
             }}
           />
         </div>
+
         <CircleComponent
           videoUrl={clientData?.data.videoUrl}
           posterUrl={clientData?.data.posterUrl}
+        />
+
+        {/* loader */}
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            boxSizing: "border-box",
+            zIndex: "30",
+            borderRadius: "50%",
+            border: `7px solid ${clientData?.data.circleBorderColor}`,
+            animation:
+              "lwid-1 1s infinite linear alternate, lwid-2 2s infinite linear, border-disappear 1s 3s forwards",
+          }}
         />
 
         {/* text */}
@@ -157,3 +201,24 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
     </>
   );
 };
+
+function createStyleSheet() {
+  const style = document.createElement("style");
+  style.appendChild(document.createTextNode(""));
+  const widget = document.getElementById("widget");
+  if (widget) {
+    widget.appendChild(style);
+  } else {
+    document.body.appendChild(style);
+  }
+  return style.sheet;
+}
+
+function injectKeyframes(
+  sheet: CSSStyleSheet,
+  keyframes: string,
+  name: string
+) {
+  const keyframesRule = `@keyframes ${name} { ${keyframes} }`;
+  sheet?.insertRule(keyframesRule, sheet.cssRules.length);
+}
