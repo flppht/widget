@@ -73,113 +73,123 @@ export const messageBlock: React.CSSProperties = {
   color: "black",
 };
 
-export const keyframes1 = `
-0% {
-  clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
-}
-12.5% {
-  clip-path: polygon(
-    50% 50%,
-    0 0,
-    50% 0%,
-    100% 0%,
-    100% 0%,
-    100% 0%,
-    100% 0%
-  );
-}
-25% {
-  clip-path: polygon(
-    50% 50%,
-    0 0,
-    50% 0%,
-    100% 0%,
-    100% 100%,
-    100% 100%,
-    100% 100%
-  );
-}
-50% {
-  clip-path: polygon(
-    50% 50%,
-    0 0,
-    50% 0%,
-    100% 0%,
-    100% 100%,
-    50% 100%,
-    0% 100%
-  );
-}
-62.5% {
-  clip-path: polygon(
-    50% 50%,
-    100% 0,
-    100% 0%,
-    100% 0%,
-    100% 100%,
-    50% 100%,
-    0% 100%
-  );
-}
-75% {
-  clip-path: polygon(
-    50% 50%,
-    100% 100%,
-    100% 100%,
-    100% 100%,
-    100% 100%,
-    50% 100%,
-    0% 100%
-  );
-}
-100% {
-  clip-path: polygon(
-    50% 50%,
-    50% 100%,
-    50% 100%,
-    50% 100%,
-    50% 100%,
-    50% 100%,
-    0% 100%
-  );
-}
+export const kf1 = `
+  @keyframes lwid-1 {
+    0% {
+      clip-path: polygon(50% 50%, 0 0, 50% 0%, 50% 0%, 50% 0%, 50% 0%, 50% 0%);
+    }
+    12.5% {
+      clip-path: polygon(
+        50% 50%,
+        0 0,
+        50% 0%,
+        100% 0%,
+        100% 0%,
+        100% 0%,
+        100% 0%
+      );
+    }
+    25% {
+      clip-path: polygon(
+        50% 50%,
+        0 0,
+        50% 0%,
+        100% 0%,
+        100% 100%,
+        100% 100%,
+        100% 100%
+      );
+    }
+    50% {
+      clip-path: polygon(
+        50% 50%,
+        0 0,
+        50% 0%,
+        100% 0%,
+        100% 100%,
+        50% 100%,
+        0% 100%
+      );
+    }
+    62.5% {
+      clip-path: polygon(
+        50% 50%,
+        100% 0,
+        100% 0%,
+        100% 0%,
+        100% 100%,
+        50% 100%,
+        0% 100%
+      );
+    }
+    75% {
+      clip-path: polygon(
+        50% 50%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        50% 100%,
+        0% 100%
+      );
+    }
+    100% {
+      clip-path: polygon(
+        50% 50%,
+        50% 100%,
+        50% 100%,
+        50% 100%,
+        50% 100%,
+        50% 100%,
+        0% 100%
+      );
+    }
+  }
 `;
 
-export const keyframes2 = `
-0% {
-  transform: scaleY(1) rotate(0deg);
-}
-49.99% {
-  transform: scaleY(1) rotate(135deg);
-}
-50% {
-  transform: scaleY(-1) rotate(0deg);
-}
-100% {
-  transform: scaleY(-1) rotate(-135deg);
-}
+export const kf2 = `
+  @keyframes lwid-2 {
+    0% {
+      transform: scaleY(1) rotate(0deg);
+    }
+    49.99% {
+      transform: scaleY(1) rotate(135deg);
+    }
+    50% {
+      transform: scaleY(-1) rotate(0deg);
+    }
+    100% {
+      transform: scaleY(-1) rotate(-135deg);
+    }
+  }
 `;
 
-export const keyframes3 = `
-to {
-  border-color: transparent;
-}
+export const kf3 = `
+  @keyframes border-disappear {
+    to {
+      border-color: transparent;
+    }
+  }
 `;
 
-// export const keyframes4 = `
-// to {
-//   border-color: rgb(100, 116, 139);
-// }
-// `;
+export const kf4 = `
+  @keyframes border-turns-primary-from-white {
+    to {
+      border-color: var(--primary-color);
+    }
+  }
+`;
 
-export const keyframes4 = `
-0% {
-  transform: scale(0.1);
-  opacity: 1;
-}
-80%,
-100% {
-  transform: scale(1.4);
-  opacity: 0;
-}
+export const kf5 = `
+  @keyframes ping {
+    0% {
+      transform: scale(0.1);
+      opacity: 1;
+    }
+    80%,
+    100% {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+  }
 `;

@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  widgetStyle,
-  hoverStyle,
-  keyframes1,
-  keyframes2,
-  keyframes3,
-  keyframes4,
-} from "./Styles";
+import { widgetStyle, hoverStyle, kf1, kf2, kf3, kf4, kf5 } from "./Styles";
 import CircleComponent from "./CircleComponent";
 import Modal from "./Modal";
 import { data } from "./TemporaryData";
@@ -55,24 +48,21 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
     fetchingData();
   }, [clientId]);
 
+  //loading styles
   useEffect(() => {
     if (clientData) {
-      const sheet = createStyleSheet();
-      if (sheet) {
-        injectKeyframes(sheet, keyframes1, "lwid-1");
-        injectKeyframes(sheet, keyframes2, "lwid-2");
-        injectKeyframes(sheet, keyframes3, "border-disappear");
-        injectKeyframes(
-          sheet,
-          `
-      to {
-        border-color: ${clientData?.data.circleBorderColor}
+      const cssContent = `
+      :root {
+        --primary-color: ${clientData.data.circleBorderColor};
       }
-      `,
-          "border-turns-primary-from-white"
-        );
-        injectKeyframes(sheet, keyframes4, "ping");
-      }
+      ${kf1}
+      ${kf2}
+      ${kf3}
+      ${kf4}
+      ${kf5}
+      `;
+
+      injectStyle(cssContent);
     }
   }, [clientData]);
 
@@ -133,7 +123,7 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
               width: "100%",
               height: "100%",
               backgroundImage: hovered
-                ? `linear-gradient(to bottom,  ${clientData?.data.circleBorderColor}, color-mix(in srgb, ${clientData?.data.circleBorderColor} 10%, transparent))`
+                ? `linear-gradient(to bottom, var(--primary-color), color-mix(in srgb, var(--primary-color) 10%, transparent))`
                 : "",
               opacity: 0.8,
               zIndex: "9999",
@@ -156,7 +146,7 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
             boxSizing: "border-box",
             zIndex: "30",
             borderRadius: "50%",
-            border: `7px solid ${clientData?.data.circleBorderColor}`,
+            border: `7px solid var(--primary-color)`,
             animation:
               "lwid-1 1s infinite linear alternate, lwid-2 2s infinite linear, border-disappear 1s 3s forwards",
           }}
@@ -215,24 +205,8 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
   );
 };
 
-function createStyleSheet() {
-  const style = document.createElement("style");
-  style.appendChild(document.createTextNode(""));
-  const widget = document.getElementById("widget");
-  if (widget) {
-    widget.appendChild(style);
-  } else {
-    document.body.appendChild(style);
-  }
-  return style.sheet;
-}
-
-function injectKeyframes(
-  sheet: CSSStyleSheet,
-  keyframes: string,
-  name: string
-) {
-  console.log(keyframes);
-  const keyframesRule = `@keyframes ${name} { ${keyframes} }`;
-  sheet?.insertRule(keyframesRule, sheet.cssRules.length);
+function injectStyle(cssContent) {
+  let stylesheet = document.createElement("style");
+  document.getElementById("widget")?.appendChild(stylesheet);
+  stylesheet.innerHTML = cssContent;
 }
