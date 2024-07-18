@@ -47,28 +47,34 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
   };
 
   useEffect(() => {
-    const item = data.find((item) => item.id === clientId);
-    setClientData(item);
+    const fetchingData = async () => {
+      const item = await data.find((item) => item.id === clientId);
+      setClientData(item);
+    };
+
+    fetchingData();
   }, [clientId]);
 
   useEffect(() => {
-    const sheet = createStyleSheet();
-    if (sheet) {
-      injectKeyframes(sheet, keyframes1, "lwid-1");
-      injectKeyframes(sheet, keyframes2, "lwid-2");
-      injectKeyframes(sheet, keyframes3, "border-disappear");
-      injectKeyframes(
-        sheet,
-        `
+    if (clientData) {
+      const sheet = createStyleSheet();
+      if (sheet) {
+        injectKeyframes(sheet, keyframes1, "lwid-1");
+        injectKeyframes(sheet, keyframes2, "lwid-2");
+        injectKeyframes(sheet, keyframes3, "border-disappear");
+        injectKeyframes(
+          sheet,
+          `
       to {
         border-color: ${clientData?.data.circleBorderColor}
       }
       `,
-        "border-turns-primary-from-white"
-      );
-      injectKeyframes(sheet, keyframes4, "ping");
+          "border-turns-primary-from-white"
+        );
+        injectKeyframes(sheet, keyframes4, "ping");
+      }
     }
-  }, []);
+  }, [clientData]);
 
   return (
     <>
@@ -226,6 +232,7 @@ function injectKeyframes(
   keyframes: string,
   name: string
 ) {
+  console.log(keyframes);
   const keyframesRule = `@keyframes ${name} { ${keyframes} }`;
   sheet?.insertRule(keyframesRule, sheet.cssRules.length);
 }
