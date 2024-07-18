@@ -55,6 +55,10 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
       :root {
         --primary-color: ${clientData.data.circleBorderColor};
       }
+      ::-webkit-scrollbar {
+        width: 0; /* Remove scrollbar space */
+        background: transparent; /* Optional: just make scrollbar invisible */
+      }
       ${kf1}
       ${kf2}
       ${kf3}
