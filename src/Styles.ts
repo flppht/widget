@@ -166,13 +166,13 @@ to {
 }
 `;
 
-export const keyframes4 = `
-to {
-  border-color: rgb(100, 116, 139);
-}
-`;
+// export const keyframes4 = `
+// to {
+//   border-color: rgb(100, 116, 139);
+// }
+// `;
 
-export const keyframes5 = `
+export const keyframes4 = `
 0% {
   transform: scale(0.1);
   opacity: 1;

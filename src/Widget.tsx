@@ -6,7 +6,6 @@ import {
   keyframes2,
   keyframes3,
   keyframes4,
-  keyframes5,
 } from "./Styles";
 import CircleComponent from "./CircleComponent";
 import Modal from "./Modal";
@@ -58,8 +57,16 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
       injectKeyframes(sheet, keyframes1, "lwid-1");
       injectKeyframes(sheet, keyframes2, "lwid-2");
       injectKeyframes(sheet, keyframes3, "border-disappear");
-      injectKeyframes(sheet, keyframes4, "border-turns-primary-from-white");
-      injectKeyframes(sheet, keyframes5, "ping");
+      injectKeyframes(
+        sheet,
+        `
+      to {
+        border-color: ${clientData?.data.circleBorderColor}
+      }
+      `,
+        "border-turns-primary-from-white"
+      );
+      injectKeyframes(sheet, keyframes4, "ping");
     }
   }, []);
 
