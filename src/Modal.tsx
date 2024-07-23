@@ -7,11 +7,24 @@ import PlayButton from "./PlayButton";
 import ControlButton from "./ControlButton";
 import { modalStyle, paragraphStyle } from "./Styles";
 import PlanButton from "./PlanButton";
+import Floorplan from "./Floorplan";
+// import InstaGallery from "./InstaFeed";
 
 type ModalProps = {
   isOpen: boolean;
   closeModal: () => void;
   clientData?: ClientData;
+};
+
+type PageData = {
+  isWelcomePage: boolean;
+  videoUrl: string | undefined;
+  title: string;
+  location: string;
+  buttons: {
+    text: string;
+    onClick?: () => void;
+  }[];
 };
 
 const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
@@ -27,6 +40,84 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+  const [showFloorplan, setShowFloorplan] = useState(false);
+  // const [showInstagram, setShowInstagram] = useState(false);
+
+  const initialData: PageData = {
+    isWelcomePage: true,
+    videoUrl: clientData?.property.coverVideo,
+    title: "Welcome to " + clientData?.property.name,
+    location:
+      clientData?.property.location.city +
+      ", " +
+      clientData?.property.location.state,
+    buttons: [
+      {
+        text: "Tour our Floor Plan",
+        onClick: () => {
+          handleChangeContent(initialData, tourFloorData);
+        },
+      },
+      { text: "Explore Amenities" },
+      { text: "中文导览" },
+    ],
+  };
+
+  const tourFloorData: PageData = {
+    isWelcomePage: false,
+    videoUrl:
+      "https://storage.googleapis.com/leasemagnets---dummy-db.appspot.com/community/43/magnet/9a4d7524-71d5-41e3-83aa-6d93b33a64c5/category/floor_plans/screen/b1/Vue53_2x2%20fp_2023.mp4??&coconut_id=lNhpx1rEriMbw3",
+    title: "",
+    location: "2 Bed + 2 Bath",
+    buttons: [
+      { text: "Tour Floor Plan in 3D" },
+      { text: "Explore Amenities" },
+      {
+        text: "Wrap Up My Tour",
+        onClick: () => {
+          handleChangeContent(tourFloorData, wrapUpData);
+        },
+      },
+    ],
+  };
+
+  const wrapUpData: PageData = {
+    isWelcomePage: false,
+    videoUrl:
+      "https://storage.googleapis.com/leasemagnets---dummy-db.appspot.com/community/43/magnet/9a4d7524-71d5-41e3-83aa-6d93b33a64c5/category/thank_you/screen/thank_you_main/Vue53_closing_2023.mp4?",
+    title: "Thanks for Touring With Us!",
+    location:
+      clientData?.property.location.city +
+      ", " +
+      clientData?.property.location.state,
+    buttons: [
+      { text: "Ask a Question" },
+      { text: "Schedule a Tour" },
+      { text: "View Available Floor Plans" },
+    ],
+  };
+
+  const [currentData, setCurrentData] = useState(initialData);
+  const [history, setHistory] = useState<PageData[]>([]);
+
+  const handleChangeContent = (previousData, nextData: PageData) => {
+    setHistory((prev) => [...prev, previousData]);
+    setCurrentData(nextData);
+    if (videoRef.current?.paused) {
+      setIsVideoPaused(false);
+    }
+  };
+
+  const handleRevertContent = () => {
+    if (history.length > 0) {
+      const previousContent = history[history.length - 1];
+      setHistory((prevHistory) => prevHistory.slice(0, -1));
+      setCurrentData(previousContent);
+    }
+    if (videoRef.current?.paused) {
+      setIsVideoPaused(false);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -76,14 +167,6 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
 
   const handleToggleVideo = () =>
     videoRef.current?.paused ? handlePlay() : handlePause();
-
-  const replayVideo = () => {
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play();
-      setIsVideoPaused(false);
-    }
-  };
 
   const handleFullScreen = () => {
     const el = modalRef.current;
@@ -156,6 +239,17 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
     setShared(!shared);
   };
 
+  const toggleShowFloorplan = () => {
+    setShowFloorplan(!showFloorplan);
+    if (videoRef.current?.paused) {
+      setIsVideoPaused(false);
+    }
+  };
+
+  // const toggleInstagram = () => {
+  //   setShowInstagram(!showInstagram);
+  // };
+
   const handleFillerClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (fillerRef.current && videoRef.current) {
       const fillerRect = fillerRef.current.getBoundingClientRect();
@@ -180,17 +274,29 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
         ...modalStyle,
         ...{
           height: isSm ? "95%" : "90%",
-          left: isSm ? "20px" : "35px",
+          left:
+            clientData?.ui.position === "left"
+              ? isSm
+                ? "20px"
+                : "35px"
+              : "unset",
+          right:
+            clientData?.ui.position === "right"
+              ? isSm
+                ? "20px"
+                : "35px"
+              : "unset",
           width: isSm ? "85%" : "60%",
           pointerEvents: !isOpen ? "none" : "all",
           zIndex: !isOpen ? "-10" : "auto",
           opacity: !isOpen ? "0" : "1",
           transform: !isOpen ? "scale(0.3)" : "scale(1)",
-          backgroundColor: clientData?.data.circleBorderColor ?? "#ffffff",
+          transformOrigin: `${clientData?.ui.position} bottom`,
+          backgroundColor: "var(--primary-color)",
         },
       }}
     >
-      {/* filler for video */}
+      {/* filler for video  */}
       <div
         style={{
           display: "flex",
@@ -232,10 +338,11 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
               height: "100%",
               pointerEvents: "none",
               width: `${progress}%`,
-              backgroundColor: `${clientData?.data.circleBorderColor}`,
+              backgroundColor: "var(--primary-color)",
             }}
           ></div>
         </div>
+
         {/* menu for video controls */}
         <div
           style={{
@@ -252,7 +359,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
             isMd={isMd}
             handleFullScreen={handleFullScreen}
             toggleMute={toggleMute}
-            replayVideo={replayVideo}
+            goBack={currentData.isWelcomePage ? undefined : handleRevertContent}
             muted={videoRef?.current?.muted}
             closeModal={handleCloseModal}
             toggleShared={toggleShared}
@@ -273,179 +380,192 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
             position: "relative",
           }}
         >
-          <div>
-            <div
-              onClick={handleToggleVideo}
-              style={{
-                position: "absolute",
-                overflow: "hidden",
-                backgroundColor: "#000000",
-                top: "0px",
-                right: "0px",
-                borderRadius: "0px",
-                width: "100%",
-                height: "100%",
-                transition: "all 0.4s ease 0s",
-              }}
-            >
-              <video
-                src={clientData?.data.videoUrl}
-                poster={clientData?.data.posterUrl}
-                playsInline
-                autoPlay
-                loop
-                ref={videoRef}
-                style={{
-                  zIndex: "10",
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  cursor: "pointer",
-                }}
-              ></video>
+          {/* {showInstagram && <InstaGallery feedId="nAFG7tTCyK8V2wpU4Jvz" />} */}
+
+          {showFloorplan && <Floorplan />}
+
+          {!showFloorplan && (
+            <>
+              <div>
+                <div
+                  onClick={handleToggleVideo}
+                  style={{
+                    position: "absolute",
+                    overflow: "hidden",
+                    backgroundColor: "#000000",
+                    top: "0px",
+                    right: "0px",
+                    borderRadius: "0px",
+                    width: "100%",
+                    height: "100%",
+                    transition: "all 0.4s ease 0s",
+                  }}
+                >
+                  <video
+                    src={currentData.videoUrl}
+                    // poster={clientData?.property.coverImage}
+                    playsInline
+                    autoPlay
+                    loop
+                    ref={videoRef}
+                    style={{
+                      zIndex: "10",
+                      position: "absolute",
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      cursor: "pointer",
+                    }}
+                  ></video>
+                  <div
+                    style={{
+                      opacity: isVideoPaused ? "0.4" : "0",
+                      transition: "opacity 0.2s ease 0s",
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: "#000000",
+                      zIndex: 10,
+                      pointerEvents: "none",
+                    }}
+                  ></div>
+                </div>
+              </div>
+              <PlayButton
+                isShown={isShown}
+                isVideoPaused={isVideoPaused}
+                handleToggleVideo={handleToggleVideo}
+                isMd={isMd}
+                isLg={isLg}
+              />
+              {/* plans */}
+              {/* gradient behind the plans  */}
               <div
                 style={{
-                  opacity: isVideoPaused ? "0.4" : "0",
-                  transition: "opacity 0.2s ease 0s",
+                  opacity: "0.5",
+                  transition: "all 0.2s ease 0s",
                   position: "absolute",
                   left: 0,
                   top: 0,
                   width: "100%",
                   height: "100%",
-                  backgroundColor: "#000000",
                   zIndex: 10,
                   pointerEvents: "none",
+                  backgroundImage:
+                    "linear-gradient(to top, rgba(0,0,0,100), rgba(0, 0, 0, 0))",
                 }}
               ></div>
-            </div>
-          </div>
-          <PlayButton
-            isShown={isShown}
-            isVideoPaused={isVideoPaused}
-            handleToggleVideo={handleToggleVideo}
-            isMd={isMd}
-            isLg={isLg}
-          />
-          {/* plans */}
-          {/* gradient behind the plans  */}
-          <div
-            style={{
-              opacity: "0.5",
-              transition: "all 0.2s ease 0s",
-              position: "absolute",
-              left: 0,
-              top: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: 10,
-              pointerEvents: "none",
-              backgroundImage:
-                "linear-gradient(to top, rgba(0,0,0,100), rgba(0, 0, 0, 0))",
-            }}
-          ></div>
-          <div
-            style={{
-              position: "absolute",
-              zIndex: 10,
-              width: "100%",
-              pointerEvents: "none",
-              bottom: 0,
-
-              display: "flex",
-              flexDirection: "column",
-              color: "white",
-              transition: "transform 0.3s",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                paddingLeft: isLg ? "1.5rem" : "1rem",
-                paddingRight: isLg ? "1.5rem" : "1rem",
-                fontSize: "20px",
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
+              <div
                 style={{
-                  width: "20px",
-                  height: "20px",
-                  marginRight: "8px",
+                  position: "absolute",
+                  zIndex: 10,
+                  width: "100%",
+                  pointerEvents: "none",
+                  bottom: 0,
+
+                  display: "flex",
+                  flexDirection: "column",
+                  color: "white",
+                  transition: "transform 0.3s",
                 }}
               >
-                <path
-                  fillRule="evenodd"
-                  d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
-                  clipRule="evenodd"
-                ></path>
-              </svg>
-              Chicago, IL
-            </div>
-            <p
-              style={{
-                fontSize: "1rem",
-                color: "white",
-                marginTop: "10px",
-                marginBottom: "10px",
-                paddingLeft: isLg ? "1.5rem" : "1rem",
-              }}
-            >
-              Where to next?
-            </p>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                gap: "0.5rem",
-                paddingLeft: isLg ? "1.5rem" : "1rem",
-                paddingRight: isLg ? "1.5rem" : "1rem",
-                paddingTop: "0.5rem",
-                paddingBottom: "1.5rem",
-              }}
-            >
-              <PlanButton
-                order={"A"}
-                text={"Tour our Floor Plan"}
-                isLg={isLg}
-              />
-              <PlanButton order={"B"} text={"Explore Amenities"} isLg={isLg} />
-              <PlanButton order={"C"} text={"中文导览"} isLg={isLg} />
-            </div>
-          </div>
-
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    paddingLeft: isLg ? "1.5rem" : "1rem",
+                    paddingRight: isLg ? "1.5rem" : "1rem",
+                    fontSize: "20px",
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    style={{
+                      width: "20px",
+                      height: "20px",
+                      marginRight: "8px",
+                    }}
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                      clipRule="evenodd"
+                    ></path>
+                  </svg>
+                  {currentData.location}
+                </div>
+                <p
+                  style={{
+                    fontSize: "1rem",
+                    color: "white",
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                    paddingLeft: isLg ? "1.5rem" : "1rem",
+                  }}
+                >
+                  Where to next?
+                </p>
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                    gap: "0.5rem",
+                    paddingLeft: isLg ? "1.5rem" : "1rem",
+                    paddingRight: isLg ? "1.5rem" : "1rem",
+                    paddingTop: "0.5rem",
+                    paddingBottom: "1.5rem",
+                    marginBottom: isSm ? "70px" : 0,
+                  }}
+                >
+                  {currentData.buttons &&
+                    currentData.buttons.map((button, index) => (
+                      <PlanButton
+                        order={String.fromCharCode("A".charCodeAt(0) + index)}
+                        text={button.text}
+                        onClick={button.onClick}
+                        isLg={isLg}
+                        key={index}
+                      />
+                    ))}
+                </div>
+              </div>
+            </>
+          )}
           {/* share option */}
           <div
             style={{
               transform: shared ? "translate(0%, 0%)" : "translate(0%, 100%)",
-              background: `${clientData?.data.backgroundColor}` || "#FFFFFF",
+              background:
+                clientData?.ui.colors.background.secondary || "#FFFFFF",
               position: "absolute",
               zIndex: 50,
               width: "100%",
               borderTopLeftRadius: "0.75rem",
               borderTopRightRadius: "0.75rem",
-              bottom: 0,
+              bottom: isSm ? "64px" : 0,
               left: 0,
               paddingTop: "0.25rem",
               paddingBottom: isSm ? "2rem" : "3rem",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              color: clientData?.data.title.color ?? "#000000",
+              color: clientData?.ui.colors.text.heading ?? "#000000",
               transition: "all 0.15s ease",
               borderTop:
                 isSm && isShown
-                  ? `1px solid ${clientData?.data.borderColor}`
+                  ? `1px solid ${clientData?.ui.colors.background.tertiary}`
                   : "",
             }}
           >
             <ShareContainer toggleShow={toggleShared} />
           </div>
         </div>
+
         {/* welcome and buttons */}
         <div
           style={{
@@ -460,11 +580,9 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
             alignItems: "center",
             position: isSm ? "absolute" : "static",
             borderLeft: !isSm
-              ? `1px solid ${clientData?.data.borderColor}`
+              ? `1px solid ${clientData?.ui.colors.background.tertiary}`
               : "",
-            background: clientData?.data.backgroundColor
-              ? `${clientData?.data.backgroundColor}`
-              : "#FFFFFF",
+            background: clientData?.ui.colors.background.secondary ?? "#FFFFFF",
             borderTopLeftRadius: isSm ? "0.75rem" : "0",
             borderTopRightRadius: isSm ? "0.75rem" : "0",
             transition: "all 0.3s ease",
@@ -509,6 +627,39 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                   marginRight: "1.25rem",
                 }}
               >
+                {/* <ControlButton
+                  style={{
+                    borderRadius: "0.75rem",
+                    borderWidth: "0",
+                    borderColor: "#D1D5DB",
+                    padding: "0.625rem",
+                    display: "flex",
+                    transition: "background-color 0.15s ease",
+                    cursor: "pointer",
+                  }}
+                  onClick={toggleInstagram}
+                  backgroundStyle={{
+                    hovered: "#e5e5e5",
+                    unhovered: "#ffffff",
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 50 50"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                    }}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M 16 3 C 8.8324839 3 3 8.8324839 3 16 L 3 34 C 3 41.167516 8.8324839 47 16 47 L 34 47 C 41.167516 47 47 41.167516 47 34 L 47 16 C 47 8.8324839 41.167516 3 34 3 L 16 3 z M 16 5 L 34 5 C 40.086484 5 45 9.9135161 45 16 L 45 34 C 45 40.086484 40.086484 45 34 45 L 16 45 C 9.9135161 45 5 40.086484 5 34 L 5 16 C 5 9.9135161 9.9135161 5 16 5 z M 37 11 A 2 2 0 0 0 35 13 A 2 2 0 0 0 37 15 A 2 2 0 0 0 39 13 A 2 2 0 0 0 37 11 z M 25 14 C 18.936712 14 14 18.936712 14 25 C 14 31.063288 18.936712 36 25 36 C 31.063288 36 36 31.063288 36 25 C 36 18.936712 31.063288 14 25 14 z M 25 16 C 29.982407 16 34 20.017593 34 25 C 34 29.982407 29.982407 34 25 34 C 20.017593 34 16 29.982407 16 25 C 16 20.017593 20.017593 16 25 16 z"
+                    ></path>
+                  </svg>
+                </ControlButton> */}
                 <ControlButton
                   style={{
                     borderRadius: "0.75rem",
@@ -597,13 +748,13 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
             >
               <div
                 style={{
-                  color: clientData?.data.title.color ?? "",
+                  color: clientData?.ui.colors.text.heading ?? "",
                   fontSize: "32px",
                   textAlign: "center",
                   fontWeight: 600,
                 }}
               >
-                {clientData?.data.title.text}
+                {currentData.title}
               </div>
               <p
                 style={{
@@ -627,10 +778,42 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
                   gap: "0.75rem",
                 }}
               >
-                {clientData?.data.buttons &&
+                {/* {clientData?.data.buttons &&
                   clientData.data.buttons.map((button, id) => (
                     <Button text={button.text} key={id} />
-                  ))}
+                  ))} */}
+                <Button text={"Book a Tour"} />
+                <Button
+                  text={"Check availability"}
+                  handleClick={toggleShowFloorplan}
+                />
+                <Button text={"Get in Touch"} />
+                {!currentData.isWelcomePage && (
+                  <Button
+                    text={"Restart Tour"}
+                    handleClick={() => {
+                      setCurrentData(initialData);
+                      setHistory([]);
+                      setIsVideoPaused(false);
+                    }}
+                    icon={
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                        <path d="M3 3v5h5"></path>
+                      </svg>
+                    }
+                  />
+                )}
               </div>
             </div>
           </div>{" "}
@@ -644,7 +827,8 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
               color: "#ffffff",
               height: "65px",
               borderTop: "1px solid",
-              borderTopColor: clientData?.data.borderColor ?? "#000000",
+              borderTopColor:
+                clientData?.ui.colors.background.tertiary ?? "#000000",
               width: "100%",
               position: "relative",
               zIndex: 20,
@@ -666,7 +850,7 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
               <p
                 style={{
                   fontSize: "14px",
-                  color: clientData?.data.title.color ?? "#000000",
+                  color: clientData?.ui.colors.text.heading ?? "#000000",
                   marginTop: "14px",
                   marginBottom: "14px",
                   whiteSpace: "nowrap",
@@ -692,9 +876,10 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
       <div
         onClick={showMenu}
         style={{
-          background: clientData?.data.backgroundColor ?? "#ffffff",
+          background: clientData?.ui.colors.background.secondary ?? "#ffffff",
           borderTop: "1px solid",
-          borderTopColor: clientData?.data.borderColor ?? "#000000",
+          borderTopColor:
+            clientData?.ui.colors.background.tertiary ?? "#000000",
           display: isSm ? "flex" : "none",
           cursor: "pointer",
           flexDirection: "row",
@@ -704,6 +889,10 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
           minHeight: "64px",
           height: "64px",
           zIndex: 50,
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
         }}
       >
         <svg

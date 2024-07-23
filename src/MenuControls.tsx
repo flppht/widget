@@ -6,7 +6,7 @@ interface MenuControlsProps {
   isMd: boolean;
   muted?: boolean;
   handleFullScreen: () => void;
-  replayVideo?: () => void;
+  goBack?: () => void;
   toggleMute?: () => void;
   closeModal?: () => void;
   toggleShared: () => void;
@@ -18,7 +18,7 @@ const MenuControls = ({
   isMd,
   muted,
   handleFullScreen,
-  replayVideo,
+  goBack,
   toggleMute,
   closeModal,
   toggleShared,
@@ -58,34 +58,36 @@ const MenuControls = ({
       >
         {!isChat && (
           <>
-            <ControlButton
-              style={buttonStyle}
-              onClick={replayVideo}
-              backgroundStyle={{
-                hovered: "rgba(0, 0, 0, 0.4)",
-                unhovered: "rgba(0, 0, 0, 0.2)",
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                style={{
-                  ...svgStyle,
-                  ...{
-                    strokeWidth: "2",
-                  },
+            {goBack && (
+              <ControlButton
+                style={buttonStyle}
+                onClick={goBack}
+                backgroundStyle={{
+                  hovered: "rgba(0, 0, 0, 0.4)",
+                  unhovered: "rgba(0, 0, 0, 0.2)",
                 }}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                ></path>
-              </svg>
-            </ControlButton>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  style={{
+                    ...svgStyle,
+                    ...{
+                      strokeWidth: "2",
+                    },
+                  }}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 19.5L8.25 12l7.5-7.5"
+                  ></path>
+                </svg>
+              </ControlButton>
+            )}
             <ControlButton
               style={buttonStyle}
               onClick={handleFullScreen}

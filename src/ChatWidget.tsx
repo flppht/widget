@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { chatStyle, hoverStyle } from "./Styles";
+import { ClientData } from "./Widget";
 
 interface ChatWidgetProps {
-  backgroundColor?: string;
+  clientData: ClientData;
   isOpen: boolean;
 }
 
-const ChatWidget = ({ backgroundColor, isOpen }: ChatWidgetProps) => {
+const ChatWidget = ({ isOpen, clientData }: ChatWidgetProps) => {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -17,10 +18,22 @@ const ChatWidget = ({ backgroundColor, isOpen }: ChatWidgetProps) => {
           ...(hovered && hoverStyle),
           ...(isOpen && { opacity: "0", display: "none" }),
           ...(isOpen ? { zIndex: "-10" } : { zIndex: "30" }),
-          ...(backgroundColor && {
-            backgroundColor: backgroundColor,
-            backgroundImage: `linear-gradient(135deg, ${backgroundColor} 60%, rgba(0, 0, 0, 0.3) 100%)`,
-          }),
+          ...{
+            backgroundColor: "var(--primary-color)",
+            backgroundImage: `linear-gradient(180deg, var(--primary-color) 60%, rgba(0, 0, 0, 0.1) 100%)`,
+            left:
+              clientData.ui.position === "left"
+                ? !clientData.ui.videoWidget.isActive
+                  ? "35px"
+                  : "140px"
+                : "unset",
+            right:
+              clientData.ui.position === "right"
+                ? !clientData.ui.videoWidget.isActive
+                  ? "35px"
+                  : "140px"
+                : "unset",
+          },
         }}
         // onClick={openModal}
         onMouseEnter={() => setHovered(true)}

@@ -2,7 +2,6 @@ export const widgetStyle: React.CSSProperties = {
   boxSizing: "border-box",
   position: "absolute",
   bottom: "20px",
-  left: "35px",
   transition: "all 0.2s ease-in-out 0.1s",
   width: "130px",
   height: "130px",
@@ -29,7 +28,6 @@ export const modalStyle: React.CSSProperties = {
   bottom: "20px",
   transition:
     "all cubic-bezier(0, 1.2, 1, 1) 0s, transform 300ms cubic-bezier(0, 1.2, 1, 1) 0s, opacity 83ms ease-out 0s",
-  transformOrigin: "left bottom",
   position: "fixed",
   zIndex: 2147483647,
   userSelect: "none",
@@ -51,7 +49,6 @@ export const chatStyle: React.CSSProperties = {
   color: "#000000",
   position: "absolute",
   bottom: "20px",
-  left: "140px",
   transition: "all 0.2s ease-in-out 0.1s",
   width: "60px",
   height: "60px",

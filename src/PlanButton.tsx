@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import { paragraphStyle } from "./Styles";
 
-const PlanButton = ({ order, text, isLg }) => {
+interface PlanButtonProps {
+  order: string;
+  text: string;
+  isLg: boolean;
+  onClick?: () => void;
+}
+
+const PlanButton = ({ order, text, isLg, onClick }: PlanButtonProps) => {
   const [hovered, setHovered] = useState(false);
 
   return (
@@ -25,10 +32,11 @@ const PlanButton = ({ order, text, isLg }) => {
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={onClick}
     >
       <div
         style={{
-          backgroundColor: "rgb(100 116 139)",
+          backgroundColor: "var(--primary-color)",
           width: "2rem",
           height: "2rem",
           borderRadius: "9999px",

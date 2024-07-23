@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import { paragraphStyle } from "./Styles";
 
-const Button = ({ text }: { text: string }) => {
-  const [hovered, setHovered] = useState(false);
+const Button = ({
+  text,
+  handleClick,
+  icon,
+}: {
+  text: string;
+  handleClick?: () => void;
+  icon?: React.JSX.Element;
+}) => {
+  const [isActive, setIsActive] = useState(false);
 
   return (
     <button
@@ -19,20 +27,24 @@ const Button = ({ text }: { text: string }) => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "start",
-        backgroundColor: hovered ? "rgb(212 212 212)" : "#FFFFFF",
-        color: "#000000",
+        justifyContent: "center",
+        backgroundColor:
+          // ? "rgb(212 212 212)"
+          isActive ? "var(--primary-color)" : "#FFFFFF",
+        color: isActive ? "#fff" : "#000000",
         cursor: "pointer",
       }}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onClick={() => {
+        if (handleClick) handleClick();
+        setIsActive(!isActive);
+      }}
     >
+      {icon && icon}
       <p
         style={{
           ...{
             fontFamily: "Inter, sans-serif",
             textAlign: "center",
-            width: "100%",
             fontSize: "0.875rem",
             fontWeight: 600,
           },
