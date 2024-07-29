@@ -4,6 +4,7 @@ import CircleComponent from "./CircleComponent";
 import Modal from "./Modal";
 import { data } from "./Data";
 import ChatWidget from "./ChatWidget";
+import axios from "axios";
 
 export interface ClientData {
   id: string | number;
@@ -91,7 +92,15 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
       setClientData(item);
     };
 
+    const fetchToken = async () => {
+      const response = await axios.get(
+        `${process.env.REACT_APP_IG_AUTH_URL}/token/${clientId}`
+      );
+      localStorage.setItem("ig_token", response.data.token);
+    };
+
     fetchingData();
+    fetchToken();
   }, [clientId]);
 
   //loading styles

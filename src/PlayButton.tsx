@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 
 interface PlayButtonProps {
-  isShown: boolean;
+  isShownMenu: boolean;
   handleToggleVideo: () => void;
   isVideoPaused: boolean;
-  isMd: boolean;
-  isLg: boolean;
+  isShownInstagram: boolean;
+  isSm: boolean;
 }
 
 const PlayButton = ({
-  isShown,
+  isShownMenu,
   handleToggleVideo,
   isVideoPaused,
-  isMd,
-  isLg,
+  isShownInstagram,
+  isSm,
 }: PlayButtonProps) => {
   const [hovered, setHovered] = useState(false);
 
@@ -23,11 +23,20 @@ const PlayButton = ({
       style={{
         opacity: isVideoPaused ? "1" : "0",
         position: "absolute",
-        top: isShown && !isMd && !isLg ? "30%" : "50%",
+        top:
+          isShownMenu && isSm
+            ? isShownInstagram
+              ? "10%"
+              : "25%"
+            : isShownInstagram
+            ? isSm
+              ? "10%"
+              : "15%"
+            : "50%",
         left: "50%",
         transform: `translate(-50%, -50%) ${hovered ? "scale(1.25)" : ""}`,
         padding: "2.25rem",
-        zIndex: 30,
+        zIndex: 20,
         borderRadius: "9999px",
         cursor: "pointer",
         backgroundColor: hovered

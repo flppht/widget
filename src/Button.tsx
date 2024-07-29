@@ -28,9 +28,7 @@ const Button = ({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor:
-          // ? "rgb(212 212 212)"
-          isActive ? "var(--primary-color)" : "#FFFFFF",
+        backgroundColor: isActive ? "var(--primary-color)" : "#FFFFFF",
         color: isActive ? "#fff" : "#000000",
         cursor: "pointer",
       }}
