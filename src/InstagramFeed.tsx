@@ -182,10 +182,13 @@ const InstagramFeed = ({
           width: "250px",
           display: "flex",
           justifyContent: "space-between",
-          marginBottom: "2px",
         }}
       >
-        <img src="instagram-logo.png" alt="logo" style={{ width: "120px" }} />
+        <img
+          src="https://1000logos.net/wp-content/uploads/2017/02/Logo-Instagram-1.png"
+          alt="logo"
+          style={{ height: "55px" }}
+        />
         <button
           onClick={toggleShowInstagram}
           style={{
