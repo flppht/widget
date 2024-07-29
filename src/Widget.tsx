@@ -94,7 +94,6 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
 
     const fetchToken = async () => {
       let url = `${process.env.REACT_APP_IG_AUTH_URL}/token/${clientId}`;
-      console.log(url);
       const response = await axios.get(url);
       window.localStorage.setItem("ig_token", response.data.token);
     };
