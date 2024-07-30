@@ -5,78 +5,13 @@ import Modal from "./Modal";
 import { data } from "./Data";
 import ChatWidget from "./ChatWidget";
 import axios from "axios";
-
-export interface ClientData {
-  id: string | number;
-  property: {
-    name: string;
-    location: {
-      city: string;
-      state: string;
-    };
-    coverVideo: string;
-    coverImage: string;
-    floorplans: {
-      name: string;
-      bedsCount: number;
-      bathsCount: number;
-      price: number;
-      size: number;
-      sizeUnits: string;
-      image: {
-        thumb: string;
-        fullImage: string;
-      };
-      space360: string;
-      video: string;
-    }[];
-    amenities: {
-      name: string;
-      coverImage: {
-        thumb: string;
-        fullImage: string;
-      };
-      video: string;
-    }[];
-  };
-  ui: {
-    position: string;
-    colors: {
-      background: {
-        primary: string;
-        secondary: string;
-        tertiary: string;
-        regular: string;
-        warning: string;
-      };
-      text: {
-        primary: string;
-        secondary: string;
-        heading: string;
-        regular: string;
-        warning: string;
-      };
-    };
-    videoWidget: {
-      isActive: boolean;
-      style: string;
-      triggerText: string;
-      triggerTextHover: string;
-      instagram: {
-        feedId: string;
-      };
-    };
-    chatWidget: {
-      isActive: boolean;
-      intercomId: string;
-    };
-  };
-}
+import { ClientData, InstagramAccessToken } from "./Types";
 
 export const Widget = ({ clientId }: { clientId?: string | number }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [clientData, setClientData] = useState<ClientData>();
+  const [accessToken, setAccessToken] = useState<InstagramAccessToken>();
 
   const openModal = () => {
     setIsOpen(true);
@@ -84,6 +19,14 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
 
   const closeModal = () => {
     setIsOpen(false);
+  };
+
+  const handleSetAccessToken = (data) => {
+    setAccessToken({
+      token: data.token,
+      expiresIn: data.expiresIn,
+      clientId: data.userId,
+    });
   };
 
   useEffect(() => {
@@ -95,7 +38,7 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
     const fetchToken = async () => {
       let url = `${process.env.REACT_APP_IG_AUTH_URL}/token/${clientId}`;
       const response = await axios.get(url);
-      window.localStorage.setItem("ig_token", response.data.token);
+      handleSetAccessToken(response.data);
     };
 
     fetchingData();
@@ -264,6 +207,8 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
             isOpen={isOpen}
             closeModal={closeModal}
             clientData={clientData}
+            accessToken={accessToken}
+            handleSetAccessToken={handleSetAccessToken}
           />
         </>
       )}

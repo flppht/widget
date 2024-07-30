@@ -1,4 +1,6 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { InstagramAccessToken } from "./Types";
 
 interface Post {
   id: string;
@@ -15,38 +17,62 @@ interface HoverPost {
   state: boolean;
 }
 
+interface InstagramFeedProps {
+  accessToken?: InstagramAccessToken;
+  handleSetAccessToken: (data: any) => void;
+  toggleShowInstagram: () => void;
+}
+
 const InstagramFeed = ({
   accessToken,
+  handleSetAccessToken,
   toggleShowInstagram,
-}: {
-  accessToken: string | null;
-  toggleShowInstagram: () => void;
-}) => {
+}: InstagramFeedProps) => {
   const [posts, setPosts] = useState<Post[]>();
   const [hovered, setHovered] = useState<HoverPost>();
 
   useEffect(() => {
-    const fetchFeed = () => {
-      fetch(
-        `https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type,permalink,thumbnail_url,username&access_token=${accessToken}`
-      )
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(
-              "Network response was not ok " + response.statusText
+    const refreshToken = async () => {
+      let response = await axios.get(
+        `${process.env.REACT_APP_IG_AUTH_URL}/refreshtoken?userId=${accessToken?.clientId}&accessToken=${accessToken?.token}`
+      );
+
+      if (response.status === 200) {
+        let res = await axios.get(
+          `${process.env.REACT_APP_IG_AUTH_URL}/token/${accessToken?.clientId}`
+        );
+        handleSetAccessToken(res.data);
+      }
+    };
+
+    const fetchFeed = async () => {
+      if (accessToken) {
+        // if it expires less than 1 day
+        if (accessToken.expiresIn - 86400000 < new Date().getTime()) {
+          await refreshToken();
+        }
+
+        fetch(
+          `https://graph.instagram.com/me/media?fields=id,caption,media_url,media_type,permalink,thumbnail_url,username&access_token=${accessToken?.token}`
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(
+                "Network response was not ok " + response.statusText
+              );
+            }
+            return response.json();
+          })
+          .then((data) => {
+            setPosts(data.data);
+          })
+          .catch((error) => {
+            console.error(
+              "There was a problem with the fetch operation: ",
+              error
             );
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setPosts(data.data);
-        })
-        .catch((error) => {
-          console.error(
-            "There was a problem with the fetch operation: ",
-            error
-          );
-        });
+          });
+      }
     };
     fetchFeed();
   }, [accessToken]);

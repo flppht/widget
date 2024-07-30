@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ClientData } from "./Widget";
 import Button from "./Button";
 import MenuControls from "./MenuControls";
 import ShareContainer from "./ShareContainer";
@@ -8,11 +7,14 @@ import { modalStyle, paragraphStyle } from "./Styles";
 import Floorplan from "./Floorplan";
 import InstagramFeed from "./InstagramFeed";
 import VideoComponent from "./VideoComponent";
+import { ClientData, InstagramAccessToken } from "./Types";
 
 type ModalProps = {
   isOpen: boolean;
   closeModal: () => void;
   clientData?: ClientData;
+  accessToken?: InstagramAccessToken;
+  handleSetAccessToken: (data: any) => void;
 };
 
 export type PageData = {
@@ -26,7 +28,13 @@ export type PageData = {
   }[];
 };
 
-const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
+const Modal = ({
+  isOpen,
+  closeModal,
+  clientData,
+  accessToken,
+  handleSetAccessToken,
+}: ModalProps) => {
   const [isVideoPaused, setIsVideoPaused] = useState(false);
   const [progress, setProgress] = useState(0);
   const [isShownMenu, setIsShownMenu] = useState(false);
@@ -421,7 +429,8 @@ const Modal = ({ isOpen, closeModal, clientData }: ModalProps) => {
             }}
           >
             <InstagramFeed
-              accessToken={localStorage.getItem("ig_token")}
+              accessToken={accessToken}
+              handleSetAccessToken={handleSetAccessToken}
               toggleShowInstagram={toggleShowInstagram}
             />
           </div>
