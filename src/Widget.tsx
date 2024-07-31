@@ -17,7 +17,7 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
 
   const openModal = () => {
     setIsOpen(true);
-    pushEventToDataLayer("widget_opened", {
+    pushEventToDataLayer(clientId + " widget_opened", {
       event_category: "button",
       event_action: "click",
       event_label: "circle_button",
