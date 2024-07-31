@@ -34,7 +34,7 @@ const InstagramFeed = ({
   useEffect(() => {
     const refreshToken = async () => {
       let response = await axios.get(
-        `${process.env.REACT_APP_IG_AUTH_URL}/refreshtoken?userId=${accessToken?.clientId}&accessToken=${accessToken?.token}`
+        `${process.env.REACT_APP_IG_AUTH_URL}/refreshtoken?userId=${accessToken?.clientId}`
       );
 
       if (response.status === 200) {
@@ -47,8 +47,8 @@ const InstagramFeed = ({
 
     const fetchFeed = async () => {
       if (accessToken) {
-        // if it expires less than 1 day
-        if (accessToken.expiresIn - 86400000 < new Date().getTime()) {
+        // if it expires less than 5 day
+        if (accessToken.expiresIn - 5 * 86400000 < new Date().getTime()) {
           await refreshToken();
         }
 
