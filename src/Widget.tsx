@@ -6,15 +6,22 @@ import { data } from "./Data";
 import ChatWidget from "./ChatWidget";
 import axios from "axios";
 import { ClientData, InstagramAccessToken } from "./Types";
+import useGTM from "./useGTM";
 
 export const Widget = ({ clientId }: { clientId?: string | number }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [clientData, setClientData] = useState<ClientData>();
   const [accessToken, setAccessToken] = useState<InstagramAccessToken>();
+  const pushEventToDataLayer = useGTM();
 
   const openModal = () => {
     setIsOpen(true);
+    pushEventToDataLayer("widget_opened", {
+      event_category: "button",
+      event_action: "click",
+      event_label: "circle_button",
+    });
   };
 
   const closeModal = () => {
