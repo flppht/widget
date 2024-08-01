@@ -111,6 +111,7 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
                 right: clientData?.ui.position === "right" ? "35px" : "unset",
               },
             }}
+            className="widget-container"
             onClick={openModal}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
