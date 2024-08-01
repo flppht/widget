@@ -33,15 +33,22 @@ const InstagramFeed = ({
 
   useEffect(() => {
     const refreshToken = async () => {
-      let response = await axios.get(
-        `${process.env.REACT_APP_IG_AUTH_URL}/refreshtoken?userId=${accessToken?.clientId}`
-      );
-
-      if (response.status === 200) {
-        let res = await axios.get(
-          `${process.env.REACT_APP_IG_AUTH_URL}/token/${accessToken?.clientId}`
+      try {
+        let response = await axios.get(
+          `${process.env.REACT_APP_IG_AUTH_URL}/refreshtoken?userId=${accessToken?.clientId}`
         );
-        handleSetAccessToken(res.data);
+
+        if (response.status === 200) {
+          let res = await axios.get(
+            `${process.env.REACT_APP_IG_AUTH_URL}/token/${accessToken?.clientId}`
+          );
+          handleSetAccessToken(res.data);
+        }
+      } catch (error) {
+        console.error(
+          "Error while refreshing instagram token. Error:",
+          error.message
+        );
       }
     };
 

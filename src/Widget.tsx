@@ -44,8 +44,15 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
 
     const fetchToken = async () => {
       let url = `${process.env.REACT_APP_IG_AUTH_URL}/token/${clientId}`;
-      const response = await axios.get(url);
-      handleSetAccessToken(response.data);
+      try {
+        const response = await axios.get(url);
+        handleSetAccessToken(response.data);
+      } catch (error) {
+        console.error(
+          "Unexpected error while fetching instagram data. Error:",
+          error.message
+        );
+      }
     };
 
     fetchingData();
