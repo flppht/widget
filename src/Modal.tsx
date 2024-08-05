@@ -265,6 +265,13 @@ const Modal = ({
   };
 
   const toggleShowInstagram = () => {
+    if (!isShownInstagram) {
+      pushEventToDataLayer(clientData?.id + " show_instagram", {
+        event_category: "button",
+        event_action: "click",
+        event_label: "instagram_button",
+      });
+    }
     setIsShownInstagram(!isShownInstagram);
   };
 
