@@ -7,7 +7,7 @@ const isGTMLoaded = () => {
   return !!document.querySelector('script[src*="googletagmanager.com/gtm.js"]');
 };
 
-if (!isGTMLoaded) {
+if (!isGTMLoaded()) {
   const tagManagerArgs = {
     gtmId: process.env.REACT_APP_GTM_ID,
   };
