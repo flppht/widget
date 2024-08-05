@@ -3,11 +3,17 @@ import ReactDOM from "react-dom/client";
 import { Widget } from "./Widget";
 import TagManager from "react-gtm-module";
 
-const tagManagerArgs = {
-  gtmId: process.env.REACT_APP_GTM_ID,
+const isGTMLoaded = () => {
+  return !!document.querySelector('script[src*="googletagmanager.com/gtm.js"]');
 };
 
-TagManager.initialize(tagManagerArgs);
+if (!isGTMLoaded) {
+  console.log("gtm already exists!");
+  const tagManagerArgs = {
+    gtmId: process.env.REACT_APP_GTM_ID,
+  };
+  TagManager.initialize(tagManagerArgs);
+}
 
 const scriptTag = document.currentScript;
 const clientId = scriptTag?.dataset.clientId || "123";
