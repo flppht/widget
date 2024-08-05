@@ -8,6 +8,7 @@ import Floorplan from "./Floorplan";
 import InstagramFeed from "./InstagramFeed";
 import VideoComponent from "./VideoComponent";
 import { ClientData, InstagramAccessToken } from "./Types";
+import useGTM from "./useGTM";
 
 type ModalProps = {
   isOpen: boolean;
@@ -50,6 +51,7 @@ const Modal = ({
   const [showFloorplan, setShowFloorplan] = useState(false);
   const [isShownInstagram, setIsShownInstagram] = useState(false);
   const [isShownVideoComponent, setIsShownVideoComponent] = useState(true);
+  const pushEventToDataLayer = useGTM();
 
   const initialData: PageData = {
     isWelcomePage: true,
@@ -248,6 +250,13 @@ const Modal = ({
   };
 
   const toggleShowFloorplan = () => {
+    // only fire when it renders floorplan
+    if (!showFloorplan)
+      pushEventToDataLayer(accessToken?.clientId + " show_floorplan", {
+        event_category: "button",
+        event_action: "click",
+        event_label: "floorplan_button",
+      });
     setShowFloorplan(!showFloorplan);
     if (videoRef.current?.paused) {
       setIsVideoPaused(false);
