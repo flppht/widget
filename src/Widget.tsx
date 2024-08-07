@@ -26,6 +26,11 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
 
   const closeModal = () => {
     setIsOpen(false);
+    pushEventToDataLayer(clientId + " widget_closed", {
+      event_category: "button",
+      event_action: "click",
+      event_label: "circle_button",
+    });
   };
 
   const handleSetAccessToken = (data) => {
