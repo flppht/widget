@@ -252,7 +252,7 @@ const Modal = ({
   const toggleShowFloorplan = () => {
     // only fire when it renders floorplan
     if (!showFloorplan)
-      pushEventToDataLayer(clientData?.id + " show_floorplan", {
+      pushEventToDataLayer(clientData?.id + " show_all_floorplans", {
         event_category: "button",
         event_action: "click",
         event_label: "floorplan_button",
