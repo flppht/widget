@@ -448,6 +448,8 @@ const Modal = ({
               accessToken={accessToken}
               handleSetAccessToken={handleSetAccessToken}
               toggleShowInstagram={toggleShowInstagram}
+              isMd={isMd}
+              isSm={isSm}
             />
           </div>
 
