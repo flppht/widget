@@ -127,6 +127,7 @@ const ActivePost = ({
           paddingTop: "2px",
           paddingBottom: "2px",
           marginBottom: "10px",
+          marginRight: "10px",
           display: "flex",
           alignItems: "center",
         }}
