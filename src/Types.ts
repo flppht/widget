@@ -1,3 +1,5 @@
+// src/Types.ts
+
 export interface ClientData {
   id: string | number;
   property: {
@@ -73,7 +75,15 @@ export interface InstagramAccessToken {
 
 declare global {
   interface Window {
+    Intercom?: (...args: any[]) => void;
+    intercomSettings?: IntercomSettings;
     ga: Function;
     dataLayer: any[];
   }
+}
+
+export interface IntercomSettings {
+  app_id: string;
+  hide_default_launcher?: boolean;
+  [key: string]: any; // Allows for additional dynamic settings
 }

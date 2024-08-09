@@ -67,7 +67,7 @@ export const data = [
       },
       chatWidget: {
         isActive: true,
-        intercomId: "http://",
+        intercomId: "m5bvaec7",
       },
     },
   },
@@ -155,7 +155,7 @@ export const data = [
       },
       chatWidget: {
         isActive: true,
-        intercomId: "http://",
+        intercomId: "m5bvaec7",
       },
     },
   },
