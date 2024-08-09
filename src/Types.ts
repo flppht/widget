@@ -70,3 +70,10 @@ export interface InstagramAccessToken {
   expiresIn: number;
   clientId: string;
 }
+
+declare global {
+  interface Window {
+    ga: Function;
+    dataLayer: any[];
+  }
+}

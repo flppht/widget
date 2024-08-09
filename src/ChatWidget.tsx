@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { chatStyle, hoverStyle } from "./Styles";
-import { ClientData } from "./Widget";
+import { ClientData } from "./Types";
 
 interface ChatWidgetProps {
   clientData: ClientData;
