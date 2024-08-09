@@ -120,12 +120,27 @@ const ActivePost = ({
           bottom: 0,
           left: "10px",
           backgroundColor: "white",
+          color: "#525252",
           borderRadius: "10px",
-          paddingRight: "5px",
-          paddingLeft: "5px",
+          paddingRight: "8px",
+          paddingLeft: "8px",
+          paddingTop: "2px",
+          paddingBottom: "2px",
+          marginBottom: "10px",
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        @{username}: {caption}
+        <span
+          style={{
+            fontWeight: "600",
+            color: "#363636",
+            paddingRight: "6px",
+          }}
+        >
+          {username}
+        </span>{" "}
+        {caption}
       </p>
 
       <div
