@@ -1,5 +1,3 @@
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
 module.exports = function override(config) {
   config.output = {
     ...config.output,

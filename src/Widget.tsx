@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { widgetStyle, hoverStyle, kf1, kf2, kf3, kf4, kf5 } from "./Styles";
 import CircleComponent from "./CircleComponent";
 import Modal from "./Modal";
-import { data } from "./Data";
 import ChatWidget from "./ChatWidget";
 import axios from "axios";
 import { ClientData, InstagramAccessToken } from "./Types";
@@ -42,9 +41,12 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
   };
 
   useEffect(() => {
-    const fetchingData = async () => {
-      const item = await data.find((item) => item.id === clientId);
-      setClientData(item);
+    console.log(process.env.PUBLIC_URL);
+    const fetchingData = () => {
+      fetch(`${process.env.PUBLIC_URL}/client_${clientId}.json`)
+        .then((response) => response.json())
+        .then((data) => setClientData(data))
+        .catch((error) => console.error("Error fetching client data:", error));
     };
 
     const fetchToken = async () => {
@@ -116,7 +118,6 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
                 right: clientData?.ui.position === "right" ? "35px" : "unset",
               },
             }}
-            id="widget-container"
             onClick={openModal}
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
