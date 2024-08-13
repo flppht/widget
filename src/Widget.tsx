@@ -41,9 +41,8 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
   };
 
   useEffect(() => {
-    console.log(process.env.PUBLIC_URL);
     const fetchingData = () => {
-      fetch(`${process.env.PUBLIC_URL}/client_${clientId}.json`)
+      fetch(`${process.env.REACT_APP_PUBLIC_URL}/client_${clientId}.json`)
         .then((response) => response.json())
         .then((data) => setClientData(data))
         .catch((error) => console.error("Error fetching client data:", error));
