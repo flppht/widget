@@ -155,12 +155,8 @@ const ActivePost = ({
       >
         {carousel.length > 0 && (
           <>
-            {currentIndex > 0 && (
-              <LeftArrow handleLeftArrowClick={handleLeftArrowClick} />
-            )}
-            {currentIndex < carousel.length - 1 && (
-              <RightArrow handleRightArrowClick={handleRightArrowClick} />
-            )}
+            <LeftArrow handleLeftArrowClick={handleLeftArrowClick} />
+            <RightArrow handleRightArrowClick={handleRightArrowClick} />
           </>
         )}
       </div>

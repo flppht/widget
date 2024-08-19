@@ -18,7 +18,7 @@ interface Post {
   };
 }
 
-export interface ActiveMedia {
+interface ActiveMedia {
   id: number | null;
   status: boolean;
 }
@@ -69,7 +69,10 @@ const InstagramFeed = ({
     const fetchFeed = async () => {
       if (accessToken) {
         // if it expires less than 5 day
-        if (accessToken.expiresIn - 5 * 86400000 < new Date().getTime()) {
+        if (
+          accessToken.expiresIn &&
+          accessToken.expiresIn - 5 * 86400000 < new Date().getTime()
+        ) {
           await refreshToken();
         }
 

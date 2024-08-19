@@ -3,10 +3,14 @@ import React, { useState } from "react";
 interface FloorplanCardProps {
   name: string;
   img: string;
-  price: string;
+  price: {
+    min: number;
+    max: number;
+  };
   bedCount?: string | number;
   bathCount: string | number;
   opacity?: number;
+  handleClick: () => void;
 }
 
 const FloorplanCard = ({
@@ -16,6 +20,7 @@ const FloorplanCard = ({
   bedCount,
   bathCount,
   opacity,
+  handleClick,
 }: FloorplanCardProps) => {
   const [hovered, setHovered] = useState(false);
 
@@ -35,6 +40,7 @@ const FloorplanCard = ({
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={handleClick}
     >
       <div
         style={{
@@ -116,7 +122,7 @@ const FloorplanCard = ({
             fontSize: "16px",
           }}
         >
-          Starting at <span style={{ fontWeight: "600" }}>{price}$</span>
+          Starting at <span style={{ fontWeight: "600" }}>{price.min}$</span>
         </div>
       </div>
     </div>

@@ -4,7 +4,7 @@ import MenuControls from "./MenuControls";
 import ShareContainer from "./ShareContainer";
 import ControlButton from "./ControlButton";
 import { modalStyle, paragraphStyle } from "./Styles";
-import Floorplan from "./Floorplan";
+import Floorplans from "./Floorplans";
 import InstagramFeed from "./InstagramFeed";
 import VideoComponent from "./VideoComponent";
 import { ClientData, InstagramAccessToken } from "./Types";
@@ -50,7 +50,6 @@ const Modal = ({
   });
   const [showFloorplan, setShowFloorplan] = useState(false);
   const [isShownInstagram, setIsShownInstagram] = useState(false);
-  const [isShownVideoComponent, setIsShownVideoComponent] = useState(true);
   const pushEventToDataLayer = useGTM();
 
   const initialData: PageData = {
@@ -147,7 +146,7 @@ const Modal = ({
       if (isOpen) {
         handlePlay();
         videoEl.currentTime = 0;
-        videoEl.muted = false;
+        videoEl.muted = true;
       } else {
         handlePause();
         videoEl.muted = true;
@@ -175,8 +174,9 @@ const Modal = ({
     setIsVideoPaused(false);
   };
 
-  const handleToggleVideo = () =>
+  const handleToggleVideo = () => {
     videoRef.current?.paused ? handlePlay() : handlePause();
+  };
 
   const handleFullScreen = () => {
     const el = modalRef.current;
@@ -258,10 +258,6 @@ const Modal = ({
         event_label: "floorplan_button",
       });
     setShowFloorplan(!showFloorplan);
-    if (videoRef.current?.paused) {
-      setIsVideoPaused(false);
-    }
-    setIsShownVideoComponent((prev) => !prev);
   };
 
   const toggleShowInstagram = () => {
@@ -405,20 +401,21 @@ const Modal = ({
             position: "relative",
           }}
         >
-          {showFloorplan ? <Floorplan /> : null}
-
-          {isShownVideoComponent ? (
-            <VideoComponent
-              isLg={isLg}
-              isSm={isSm}
-              isShownMenu={isShownMenu}
-              currentData={currentData}
-              handleToggleVideo={handleToggleVideo}
-              videoRef={videoRef}
-              isVideoPaused={isVideoPaused}
-              isShownInstagram={isShownInstagram}
-            />
+          {showFloorplan ? (
+            <Floorplans clientData={clientData} isSm={isSm} />
           ) : null}
+
+          <VideoComponent
+            isLg={isLg}
+            isSm={isSm}
+            isShownMenu={isShownMenu}
+            currentData={currentData}
+            handleToggleVideo={handleToggleVideo}
+            videoRef={videoRef}
+            isVideoPaused={isVideoPaused}
+            isShownInstagram={isShownInstagram}
+            isShownFloorplan={showFloorplan}
+          />
 
           {/* instagram  */}
           <div
@@ -444,13 +441,15 @@ const Modal = ({
               transition: "all 0.3s ease",
             }}
           >
-            <InstagramFeed
-              accessToken={accessToken}
-              handleSetAccessToken={handleSetAccessToken}
-              toggleShowInstagram={toggleShowInstagram}
-              isMd={isMd}
-              isSm={isSm}
-            />
+            {isShownInstagram && (
+              <InstagramFeed
+                accessToken={accessToken}
+                handleSetAccessToken={handleSetAccessToken}
+                toggleShowInstagram={toggleShowInstagram}
+                isMd={isMd}
+                isSm={isSm}
+              />
+            )}
           </div>
 
           {/* share option */}
@@ -558,7 +557,6 @@ const Modal = ({
                     padding: "0.625rem",
                     display: "flex",
                     transition: "background-color 0.15s ease",
-                    // backgroundColor: "#ffffff",
                     cursor: "pointer",
                   }}
                   onClick={toggleShared}
@@ -593,7 +591,6 @@ const Modal = ({
                     padding: "0.625rem",
                     display: "flex",
                     transition: "background-color 0.15s ease",
-                    // backgroundColor: "#ffffff",
                     cursor: "pointer",
                   }}
                   onClick={isSm ? showMenu : handleCloseModal}
@@ -746,9 +743,9 @@ const Modal = ({
                   whiteSpace: "nowrap",
                 }}
               >
-                Powered by
+                Powered by ShowMyProperty.TV
               </p>
-              <img
+              {/* <img
                 style={{
                   height: "1.25rem",
                   marginTop: "2px",
@@ -756,7 +753,7 @@ const Modal = ({
                 }}
                 src="https://imagedelivery.net/d3WSibrZmE8m_HEZW60OcQ/f1241207-f4a8-4e8a-030e-110332ad6200/public"
                 alt=""
-              />
+              /> */}
             </div>
           </div>
         </div>

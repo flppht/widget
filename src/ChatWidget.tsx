@@ -37,6 +37,11 @@ const ChatWidget = ({ isOpen, clientData }: ChatWidgetProps) => {
       }
     };
 
+    if (window.Intercom) {
+      window.Intercom("onhide", () => {
+        console.log("intercome widget closed");
+      });
+    }
     loadIntercom();
 
     return () => {

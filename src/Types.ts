@@ -12,15 +12,15 @@ export interface ClientData {
     coverImage: string;
     floorplans: {
       name: string;
-      bedsCount: number;
+      bedsCount?: number;
       bathsCount: number;
-      price: number;
+      price: {
+        min: number;
+        max: number;
+      };
       size: number;
       sizeUnits: string;
-      image: {
-        thumb: string;
-        fullImage: string;
-      };
+      image: string;
       space360: string;
       video: string;
     }[];
@@ -57,7 +57,8 @@ export interface ClientData {
       triggerText: string;
       triggerTextHover: string;
       instagram: {
-        feedId: string;
+        token: string;
+        expiresIn: number;
       };
     };
     chatWidget: {
@@ -68,9 +69,9 @@ export interface ClientData {
 }
 
 export interface InstagramAccessToken {
-  token: string;
-  expiresIn: number;
-  clientId: string;
+  token?: string;
+  expiresIn?: number;
+  clientId?: string | number;
 }
 
 declare global {
@@ -86,4 +87,19 @@ export interface IntercomSettings {
   app_id: string;
   hide_default_launcher?: boolean;
   [key: string]: any; // Allows for additional dynamic settings
+}
+
+export interface FloorplanType {
+  name: string;
+  bedsCount?: number;
+  bathsCount: number;
+  price: {
+    min: number;
+    max: number;
+  };
+  size: number;
+  sizeUnits: string;
+  image: string;
+  space360: string;
+  video: string;
 }

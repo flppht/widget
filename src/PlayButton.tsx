@@ -5,6 +5,7 @@ interface PlayButtonProps {
   handleToggleVideo: () => void;
   isVideoPaused: boolean;
   isShownInstagram: boolean;
+  isShownFloorplan: boolean;
   isSm: boolean;
 }
 
@@ -13,6 +14,7 @@ const PlayButton = ({
   handleToggleVideo,
   isVideoPaused,
   isShownInstagram,
+  isShownFloorplan,
   isSm,
 }: PlayButtonProps) => {
   const [hovered, setHovered] = useState(false);
@@ -23,19 +25,21 @@ const PlayButton = ({
       style={{
         opacity: isVideoPaused ? "1" : "0",
         position: "absolute",
-        top:
-          isShownMenu && isSm
-            ? isShownInstagram
-              ? "10%"
-              : "25%"
-            : isShownInstagram
-            ? isSm
-              ? "10%"
-              : "15%"
-            : "50%",
-        left: "50%",
+        top: isShownFloorplan
+          ? "120px"
+          : isShownMenu && isSm
+          ? isShownInstagram
+            ? "10%"
+            : "25%"
+          : isShownInstagram
+          ? isSm
+            ? "10%"
+            : "15%"
+          : "50%",
+        left: !isShownFloorplan ? "50%" : "unset",
+        right: isShownFloorplan ? "15px" : "unset",
         transform: `translate(-50%, -50%) ${hovered ? "scale(1.25)" : ""}`,
-        padding: "2.25rem",
+        padding: isShownFloorplan ? "0.75rem" : "2.25rem",
         zIndex: 20,
         borderRadius: "9999px",
         cursor: "pointer",
@@ -49,6 +53,8 @@ const PlayButton = ({
         flexDirection: "row",
         alignItems: "center",
         color: "#FFFFFF",
+        width: "fit-content",
+        height: "fit-content",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}

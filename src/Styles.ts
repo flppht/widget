@@ -5,7 +5,10 @@ export const widgetStyle: React.CSSProperties = {
   transition: "all 0.2s ease-in-out 0.1s",
   width: "130px",
   height: "130px",
-  borderRadius: "9999px",
+  borderBottomLeftRadius: "20px",
+  borderBottomRightRadius: "20px",
+  borderTopLeftRadius: "50px",
+  borderTopRightRadius: "50px",
   boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
   fontSize: "15px",
   display: "flex",
@@ -190,3 +193,16 @@ export const kf5 = `
     }
   }
 `;
+
+export const itemFilter: React.CSSProperties = {
+  background: "rgba(21,27,83,.04)",
+  borderRadius: "2px",
+  padding: "7px",
+  minWidth: "80px",
+  fontSize: "14px",
+  textAlign: "center",
+  color: "#201f1e",
+  margin: "4px",
+  transition: "all .2s linear 0s",
+  cursor: "pointer",
+};

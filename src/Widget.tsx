@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { widgetStyle, hoverStyle, kf1, kf2, kf3, kf4, kf5 } from "./Styles";
 import CircleComponent from "./CircleComponent";
 import Modal from "./Modal";
+import { data } from "./Data";
 import ChatWidget from "./ChatWidget";
-import axios from "axios";
 import { ClientData, InstagramAccessToken } from "./Types";
 import useGTM from "./useGTM";
 
@@ -41,28 +41,31 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
   };
 
   useEffect(() => {
-    const fetchingData = () => {
-      fetch(`${process.env.REACT_APP_PUBLIC_URL}/client_${clientId}.json`)
-        .then((response) => response.json())
-        .then((data) => setClientData(data))
-        .catch((error) => console.error("Error fetching client data:", error));
+    const fetchingData = async () => {
+      const item = await data.find((item) => item.id === clientId);
+      setAccessToken({
+        token: item?.ui.videoWidget.instagram.token,
+        expiresIn: item?.ui.videoWidget.instagram.expiresIn,
+        clientId: clientId,
+      });
+      setClientData(item);
     };
 
-    const fetchToken = async () => {
-      let url = `${process.env.REACT_APP_IG_AUTH_URL}/token/${clientId}`;
-      try {
-        const response = await axios.get(url);
-        handleSetAccessToken(response.data);
-      } catch (error) {
-        console.error(
-          "Unexpected error while fetching instagram data. Error:",
-          error.message
-        );
-      }
-    };
+    // const fetchToken = async () => {
+    //   let url = `${process.env.REACT_APP_IG_AUTH_URL}/token/${clientId}`;
+    //   try {
+    //     const response = await axios.get(url);
+    //     handleSetAccessToken(response.data);
+    //   } catch (error) {
+    //     console.error(
+    //       "Unexpected error while fetching instagram data. Error:",
+    //       error.message
+    //     );
+    //   }
+    // };
 
     fetchingData();
-    fetchToken();
+    // fetchToken();
   }, [clientId]);
 
   //loading styles
@@ -159,10 +162,10 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
               />
             </div>
 
-            <CircleComponent
+            {/* <CircleComponent
               videoUrl={clientData?.property.coverVideo}
               posterUrl={clientData?.property.coverImage}
-            />
+            /> */}
 
             {/* loader */}
             <div
