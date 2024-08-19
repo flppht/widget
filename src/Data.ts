@@ -107,9 +107,8 @@ export const data = [
         triggerText: "See more",
         triggerTextHover: "Click me!",
         instagram: {
-          token:
-            "IGQWRNTHM3VWJFc1JFc2tRVXR0NVg1aFdQVlR5NGIxa0lJdkpOYkp1OG5OREQ0c0lfVXhCeW9ObFoyUHdpNEgyQ3dGdVFCUEtfLVNoTld0LUhyd2RERVc4d0VQZADZACRnktaWQ0S2VTbnZAuUQZDZD",
-          expiresIn: 1728742935617,
+          token: process.env.REACT_APP_IG_TOKEN,
+          expiresIn: 1729242950310,
         },
       },
       chatWidget: {
@@ -242,9 +241,8 @@ export const data = [
         triggerText: "Want to see more?",
         triggerTextHover: "Let's dive in!",
         instagram: {
-          token:
-            "IGQWRNTHM3VWJFc1JFc2tRVXR0NVg1aFdQVlR5NGIxa0lJdkpOYkp1OG5OREQ0c0lfVXhCeW9ObFoyUHdpNEgyQ3dGdVFCUEtfLVNoTld0LUhyd2RERVc4d0VQZADZACRnktaWQ0S2VTbnZAuUQZDZD",
-          expiresIn: 1728742935617,
+          token: process.env.REACT_APP_IG_TOKEN,
+          expiresIn: 1729242950310,
         },
       },
       chatWidget: {
