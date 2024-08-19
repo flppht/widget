@@ -22,6 +22,6 @@ const clientId = scriptTag?.dataset.clientId || "123";
 
 ReactDOM.createRoot(document.getElementById("widget")!).render(
   <ThemeProvider theme={theme}>
-    {/* <Widget clientId={clientId} /> */}
+    <Widget clientId={clientId} />
   </ThemeProvider>
 );

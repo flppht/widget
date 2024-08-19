@@ -162,10 +162,10 @@ export const Widget = ({ clientId }: { clientId?: string | number }) => {
               />
             </div>
 
-            {/* <CircleComponent
+            <CircleComponent
               videoUrl={clientData?.property.coverVideo}
               posterUrl={clientData?.property.coverImage}
-            /> */}
+            />
 
             {/* loader */}
             <div
